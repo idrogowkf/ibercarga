@@ -2,6 +2,7 @@
   "name": "ibercarga",
   "version": "1.0.0",
   "private": true,
+  "engines": { "node": "18.x" },
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -12,7 +13,8 @@
     "vite": "^4.5.9",
     "tailwindcss": "3.4.14",
     "postcss": "^8.4.45",
-    "autoprefixer": "^10.4.20"
+    "autoprefixer": "^10.4.20",
+    "@tailwindcss/postcss": "^0.1.1"
   },
   "scripts": {
     "dev": "vite",
