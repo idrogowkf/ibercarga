@@ -293,51 +293,22 @@ export default function App() {
 
     const onChange = (e) => setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
 
-    const onSubmit = async (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-
-        // Validación
-        for (const [k, v] of Object.entries(form)) {
-            if (!v) {
-                setToast("Completa todos los campos para obtener tu presupuesto.");
-                return;
-            }
-        }
-
         try {
-            const resp = await fetch("/api/send-quote", {
+            const res = await fetch("/api/send-quote", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(form),
             });
-            const data = await resp.json();
-
-            if (!resp.ok || !data.ok) {
-                throw new Error(data.error || "No se pudo enviar el correo");
+            if (res.ok) {
+                alert("✅ Solicitud enviada con éxito");
+            } else {
+                alert("❌ Error al enviar la solicitud");
             }
-
-            setToast("✅ ¡Solicitud enviada! Te hemos enviado un resumen a tu correo.");
-            // Limpieza opcional:
-            // setForm({ origen:"", destino:"", tipo:"", piezas:"", fecha:"", nombre:"", telefono:"", email:"", vehiculo:"" });
         } catch (err) {
-            // Fallback mailto
-            const body =
-                `Ruta: ${form.origen} → ${form.destino}%0D%0A` +
-                `Tipo: ${form.tipo}%0D%0A` +
-                `Piezas: ${form.piezas}%0D%0A` +
-                `Fecha: ${form.fecha}%0D%0A` +
-                `Vehículo: ${form.vehiculo}%0D%0A` +
-                `Nombre: ${form.nombre}%0D%0A` +
-                `Teléfono: ${form.telefono}%0D%0A` +
-                `Email: ${form.email}%0D%0A`;
-
-            window.location.href =
-                `mailto:contacto@ibercarga.com` +
-                `?cc=${encodeURIComponent(form.email)}` +
-                `&subject=${encodeURIComponent("Solicitud de presupuesto Ibercarga")}` +
-                `&body=${body}`;
-
-            setToast("⚠️ Hubo un problema enviando automáticamente. Abrimos tu correo para que lo envíes.");
+            console.error(err);
+            alert("⚠️ Fallo de conexión con el servidor");
         }
     };
 

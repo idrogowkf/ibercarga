@@ -1,28 +1,15 @@
 {
   "version": 2,
   "functions": {
-    "api/*.js": {
-      "runtime": "nodejs22.x"
-    }
+    "api/*.js": { "runtime": "nodejs22.x" }
   },
   "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/static-build"
-    }
+    { "src": "package.json", "use": "@vercel/static-build" }
   ],
   "routes": [
-    {
-      "src": "/api/health",
-      "dest": "/api/health.js"
-    },
-    {
-      "src": "/api/send-quote",
-      "dest": "/api/send-quote.js"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/"
-    }
+    { "src": "/api/ping", "dest": "/api/ping.js" },
+    { "src": "/api/health", "dest": "/api/health.js" },
+    { "src": "/api/send-quote", "dest": "/api/send-quote.js" },
+    { "src": "/(.*)", "dest": "/" }
   ]
 }

@@ -2,7 +2,4 @@
 @tailwind components;
 @tailwind utilities;
 
-/* prueba visual rápida: */
-body {
-    min-height: 100vh;
-}
+/* marcador para probar que carga el CSS */
