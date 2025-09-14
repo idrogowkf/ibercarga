@@ -1,14 +1,70 @@
 <!doctype html>
 <html lang="es">
 <head>
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ibercarga</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+    <title>Ibercarga — Transporte especial y sobredimensionado en España</title>
+    <meta name="description"
+          content="Ibercarga: expertos en transporte especial y sobredimensionado en toda España. Eólico, prefabricado de hormigón, industrial, transformadores y más. Presupuesto rápido." />
+    <meta name="theme-color" content="#1e3a8a" />
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://ibercarga.com/" />
+
+    <!-- Favicon & app icons -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_ES" />
+    <meta property="og:site_name" content="Ibercarga" />
+    <meta property="og:title" content="Ibercarga — Transporte especial en España" />
+    <meta property="og:description"
+          content="Transporte especial y sobredimensionado en toda España: eólico, prefabricado, industrial, transformadores y más." />
+    <meta property="og:url" content="https://ibercarga.com/" />
+    <!-- Asegúrate de que este archivo exista en producción -->
+    <meta property="og:image" content="https://ibercarga.com/og/ibercarga-hero.jpg" />
+    <meta property="og:image:alt" content="Camión de Ibercarga con carga especial al atardecer" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Ibercarga — Transporte especial en España" />
+    <meta name="twitter:description"
+          content="Expertos en transporte especial y sobredimensionado. Pide presupuesto en minutos." />
+    <meta name="twitter:image" content="https://ibercarga.com/og/ibercarga-hero.jpg" />
+
+    <!-- Preconexión + fuente (opcional) -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet" />
+
+    <!-- Datos estructurados -->
+    <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          "name": "Ibercarga",
+          "url": "https://ibercarga.com/",
+          "logo": "https://ibercarga.com/favicon.svg",
+          "email": "mailto:transporte@ibercarga.com",
+          "telephone": "+34 624 473 123",
+          "sameAs": []
+        }
+    </script>
+
+    <!-- Generado con Vite -->
+    <meta name="generator" content="Vite" />
 </head>
-<body>
+<body class="antialiased">
     <div id="root"></div>
-    <!-- Tu entry ES index.jsx, así que apunta aquí -->
+    <!-- IMPORTANTE: este path debe coincidir con tu entry real -->
     <script type="module" src="/src/index.jsx"></script>
 </body>
 </html>
