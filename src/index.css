@@ -1,5 +1,12 @@
+/* 1) SIEMPRE primero los @import */
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+
+/* 2) Luego Tailwind */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* marcador para probar que carga el CSS */
+/* 3) Tu clase utilitaria */
+.font-display {
+    font-family: 'Anton', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+}

@@ -1,438 +1,314 @@
 import React, { useState } from "react";
-import { Truck, MapPin, Search, ShieldCheck, Star, CheckCircle2, ArrowRight } from "lucide-react";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { Truck, Search, MapPin, ShieldCheck, ArrowRight, Phone, Mail, Image as ImageIcon } from "lucide-react";
 
-/* ====== BLOQUES ====== */
+// -------------------- Config ----------------------
+const PHONE = "+34 624 473 123";
+const EMAIL = "transporte@ibercarga.com";
 
-function TrustBar() {
-    const items = [
-        { label: "Transportistas verificados", icon: <ShieldCheck className="w-5 h-5" />, tint: "text-emerald-600" },
-        { label: "Ahorro medio 18–30%", icon: <Star className="w-5 h-5" />, tint: "text-amber-500" },
-        { label: "Cobertura España + UE", icon: <CheckCircle2 className="w-5 h-5" />, tint: "text-indigo-600" },
-    ];
+// Rutas de imágenes (pon los ficheros en /public/...)
+const HERO_IMG = "/hero/ibercarga-aspa.jpg";
+const GALLERY = [
+    { src: "/gallery/industrial.jpg", title: "Industrial" },
+    { src: "/gallery/prefabricado.jpg", title: "Prefabricado de hormigón" },
+    { src: "/gallery/eolico.jpg", title: "Eólico (palas / tramos)" },
+    { src: "/gallery/transformador.jpg", title: "Transformadores" },
+    { src: "/gallery/maquinaria-pesada.jpg", title: "Maquinaria pesada" },
+    { src: "/gallery/estructura-metalica.jpg", title: "Estructuras metálicas" },
+];
+
+// -------------------- UI ----------------------
+function Navbar() {
     return (
-        <div className="max-w-7xl mx-auto px-4 -mt-10">
-            <div className="grid md:grid-cols-3 gap-4">
-                {items.map((it, i) => (
-                    <div key={i} className="bg-white/90 backdrop-blur rounded-xl border shadow-sm p-4 flex items-center gap-3">
-                        <span className={`${it.tint}`}>{it.icon}</span>
-                        <span className="font-medium">{it.label}</span>
-                    </div>
-                ))}
-            </div>
-        </div>
-    );
-}
-
-function CityChips() {
-    const cities = ["Madrid", "Barcelona", "Valencia", "Sevilla", "Bilbao", "Málaga", "Zaragoza", "Murcia", "Alicante", "A Coruña"];
-    return (
-        <div className="max-w-7xl mx-auto px-4 mt-6">
-            <div className="flex flex-wrap gap-2">
-                {cities.map((c) => (
-                    <span key={c} className="px-3 py-1.5 rounded-full border text-sm bg-white hover:border-indigo-300 cursor-pointer">
-                        {c}
-                    </span>
-                ))}
-            </div>
-        </div>
-    );
-}
-
-function Categories() {
-    const cats = [
-        { name: "Maquinaria industrial", tint: "bg-indigo-50 text-indigo-700 border-indigo-100" },
-        { name: "Prefabricados de hormigón", tint: "bg-amber-50 text-amber-700 border-amber-100" },
-        { name: "Eólico (palas/tótems)", tint: "bg-emerald-50 text-emerald-700 border-emerald-100" },
-        { name: "Transformadores", tint: "bg-rose-50 text-rose-700 border-rose-100" },
-        { name: "Sobredimensionado", tint: "bg-sky-50 text-sky-700 border-sky-100" },
-        { name: "Obra civil/pesado", tint: "bg-teal-50 text-teal-700 border-teal-100" },
-    ];
-    return (
-        <section className="py-10 bg-white">
+        <header className="sticky top-0 z-40 bg-indigo-700 text-white">
             <div className="max-w-7xl mx-auto px-4">
-                <h3 className="text-xl font-bold mb-4">Categorías populares</h3>
-                <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
-                    {cats.map((c) => (
-                        <div key={c.name} className={`rounded-xl border p-4 ${c.tint}`}>
-                            {c.name}
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </section>
-    );
-}
-
-function RecentListings() {
-    const items = [
-        { id: 1, title: "Traslado de prensa 35 t", route: "Bilbao → Zaragoza", date: "Hace 2 h", tags: ["Industrial", "Góndola"], budget: "Presupuesto abierto" },
-        { id: 2, title: "Vigas prefabricadas 30 m (4 uds)", route: "Talavera → Madrid", date: "Hoy", tags: ["Prefabricado", "Extensible"], budget: "7.800 € estimado" },
-        { id: 3, title: "Pala eólica 58 m", route: "Cádiz → Tarifa", date: "Ayer", tags: ["Eólico", "Escolta"], budget: "9.900 € estimado" },
-        { id: 4, title: "Transformador 75 t", route: "Bilbao → Burgos", date: "Esta semana", tags: ["Transformador", "Especial"], budget: "12.500 € estimado" },
-    ];
-    return (
-        <section className="py-10 bg-gray-50">
-            <div className="max-w-7xl mx-auto px-4">{/* ojo: mx-auto (no mx_auto) */}
-                <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-xl font-bold">Últimas solicitudes</h3>
-                    <a href="#presupuesto" className="text-indigo-700 hover:underline text-sm">Obtener presupuesto</a>
-                </div>
-                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    {items.map((it) => (
-                        <div key={it.id} className="bg-white rounded-xl border shadow-sm p-4">
-                            <div className="text-sm text-gray-500">{it.date}</div>
-                            <h4 className="font-semibold mt-1">{it.title}</h4>
-                            <div className="flex items-center gap-2 text-sm text-gray-600 mt-1">
-                                <MapPin className="w-4 h-4" />
-                                {it.route}
-                            </div>
-                            <div className="flex flex-wrap gap-2 mt-2">
-                                {it.tags.map((t) => (
-                                    <span key={t} className="text-xs px-2 py-1 rounded-full border bg-gray-50">{t}</span>
-                                ))}
-                            </div>
-                            <div className="mt-3 text-sm">
-                                <span className="text-gray-500">Referencia: </span>
-                                <span className="font-medium">{it.budget}</span>
-                            </div>
-                            <button className="mt-4 w-full rounded-lg bg-indigo-600 text-white py-2 text-sm hover:bg-indigo-700">
-                                Enviar oferta
-                            </button>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </section>
-    );
-}
-
-function HowItWorks() {
-    const steps = [
-        { n: 1, title: "Publica tu carga", desc: "Origen, destino, tipo, medidas y fechas." },
-        { n: 2, title: "Recibe ofertas", desc: "Transportistas verificados compiten por tu trabajo." },
-        { n: 3, title: "Elige y ahorra", desc: "Compara valoraciones y precio. Gestiona todo online." },
-    ];
-    return (
-        <section id="comofunciona" className="py-16 bg-white">
-            <div className="max-w-7xl mx-auto px-4">
-                <h3 className="text-2xl font-bold text-center">¿Cómo funciona?</h3>
-                <p className="text-center text-gray-600 mt-2">Simple, transparente y seguro.</p>
-                <div className="grid md:grid-cols-3 gap-6 mt-8">
-                    {steps.map((s) => (
-                        <div key={s.n} className="p-6 rounded-2xl border bg-white shadow-sm">
-                            <div className="w-10 h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold">
-                                {s.n}
-                            </div>
-                            <h4 className="font-semibold mt-3">{s.title}</h4>
-                            <p className="text-sm text-gray-600 mt-1">{s.desc}</p>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </section>
-    );
-}
-
-/* ====== GALERÍA (6 imágenes) ====== */
-function Gallery() {
-    const images = [
-        "/gallery/industrial.jpg",
-        "/gallery/prefabricado.jpg",
-        "/gallery/eolico.jpg",
-        "/gallery/transformador.jpg",
-        "/gallery/puente.jpg",
-        "/gallery/grua.jpg",
-    ];
-
-    return (
-        <section className="py-14 bg-gray-50">
-            <div className="max-w-7xl mx-auto px-4">
-                <h3 className="text-2xl font-bold text-center mb-8">Equipos y Maquinas</h3>
-                <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
-                    {images.map((src, i) => (
-                        <div key={i} className="overflow-hidden rounded-xl shadow-sm border">
-                            <img
-                                src={src}
-                                alt={`Proyecto ${i + 1}`}
-                                className="w-full h-48 object-cover hover:scale-105 transition-transform"
-                            />
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </section>
-    );
-}
-
-/* ====== TESTIMONIOS (3 empresas) ====== */
-function Testimonials() {
-    const items = [
-        {
-            empresa: "Construcciones Iberia",
-            texto: "Gracias a Ibercarga pudimos transportar vigas prefabricadas de 30 m en tiempo récord, reduciendo costes y evitando retrasos en obra.",
-            persona: "Juan Pérez · Director de Proyectos",
-        },
-        {
-            empresa: "Enercon",
-            texto: "Gestionaron el traslado de nuestras palas eólicas de 58 m con permisos y escoltas. Todo seguro y a tiempo.",
-            persona: "María López · Responsable Logística",
-        },
-        {
-            empresa: "Industrias del Norte",
-            texto: "Trasladamos un transformador de 80 toneladas sin complicaciones. Ibercarga nos dio tranquilidad y ahorro.",
-            persona: "Carles Gómez · Jefe de Planta",
-        },
-    ];
-
-    return (
-        <section className="py-14 bg-white">
-            <div className="max-w-7xl mx-auto px-4">
-                <h3 className="text-2xl font-bold text-center mb-10">Lo que dicen las empresas</h3>
-                <div className="grid md:grid-cols-3 gap-6">
-                    {items.map((t, i) => (
-                        <div key={i} className="p-6 border rounded-xl shadow-sm bg-gray-50 flex flex-col">
-                            <p className="text-gray-700 flex-1">“{t.texto}”</p>
-                            <div className="mt-4">
-                                <p className="font-semibold">{t.empresa}</p>
-                                <p className="text-sm text-gray-500">{t.persona}</p>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </section>
-    );
-}
-
-function FAQ() {
-    const faqs = [
-        { q: "¿Cuánto cuesta publicar?", a: "Publicar es gratis. Pagas el transporte al aceptar una oferta." },
-        { q: "¿Cómo verifican a los transportistas?", a: "Documentación, seguros, experiencia y evaluaciones de clientes." },
-        { q: "¿Gestionan permisos y escoltas?", a: "Sí, el transportista incluye permisos/seguridad cuando aplica." },
-    ];
-    return (
-        <section className="py-14 bg-white">
-            <div className="max-w-7xl mx-auto px-4">
-                <h3 className="text-2xl font-bold text-center">Preguntas frecuentes</h3>
-                <div className="mt-6 grid md:grid-cols-3 gap-4">
-                    {faqs.map((f, i) => (
-                        <div key={i} className="p-5 rounded-2xl border bg-white shadow-sm">
-                            <h4 className="font-semibold">{f.q}</h4>
-                            <p className="text-sm text-gray-600 mt-1">{f.a}</p>
-                        </div>
-                    ))}
-                </div>
-            </div>
-        </section>
-    );
-}
-/* ====== FOOTER ====== */
-function Footer() {
-    return (
-        <footer className="border-t bg-white">
-            <div className="max-w-7xl mx-auto px-4 py-10 grid sm:grid-cols-2 lg:grid-cols-4 gap-6 text-sm">
-                <div>
-                    <div className="flex items-center gap-2">
-                        <Truck className="w-5 h-5" />
+                <div className="flex items-center justify-between h-16">
+                    <Link to="/" className="flex items-center gap-2">
+                        <Truck className="w-7 h-7 text-white" />
                         <span className="font-bold text-lg">Ibercarga</span>
-                    </div>
-                    <p className="mt-2 text-gray-600">Marketplace de transporte especial y cargas pesadas.</p>
-                </div>
-                <div>
-                    <h5 className="font-semibold">Para clientes</h5>
-                    <ul className="mt-2 space-y-1 text-gray-600">
-                        <li><a href="#presupuesto" className="hover:underline">Obtener presupuesto</a></li>
-                        <li><a href="#comofunciona" className="hover:underline">Cómo funciona</a></li>
-                        <li><a href="#" className="hover:underline">Precios</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h5 className="font-semibold">Para transportistas</h5>
-                    <ul className="mt-2 space-y-1 text-gray-600">
-                        <li><a href="#" className="hover:underline">Registro</a></li>
-                        <li><a href="#" className="hover:underline">Ofertas disponibles</a></li>
-                        <li><a href="#" className="hover:underline">Verificación</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h5 className="font-semibold">Contacto</h5>
-                    <ul className="mt-2 space-y-1 text-gray-600">
-                        <li>+34 624 473 123</li>
-                        <li>contacto@ibercarga.com</li>
-                        <li>Castilla-La Mancha, España</li>
-                    </ul>
+                        <span className="hidden md:inline text-sm text-indigo-200">· Transporte Especial</span>
+                    </Link>
+                    <nav className="flex items-center gap-6 text-sm">
+                        <Link to="/" className="hover:text-indigo-200">Home</Link>
+                        <Link to="/como-funciona" className="hover:text-indigo-200">Cómo funciona</Link>
+                        <Link to="/ofertas" className="hover:text-indigo-200">Ofertas</Link>
+                        <a href="#contacto" className="hover:text-indigo-200">Contacto</a>
+                    </nav>
                 </div>
             </div>
-            <div className="border-t">
-                <div className="max-w-7xl mx-auto px-4 py-6 text-xs text-gray-500 flex items-center justify-between">
-                    <div>© {new Date().getFullYear()} Ibercarga. Todos los derechos reservados.</div>
-                    <div className="flex gap-4">
-                        <a href="#" className="hover:underline">Privacidad</a>
-                        <a href="#" className="hover:underline">Términos</a>
-                    </div>
-                </div>
-            </div>
-        </footer>
+        </header>
     );
 }
-/* ====== NAV + HERO + FORM + SECCIONES ====== */
 
-export default function App() {
+// -------------------- Pages ----------------------
+function Home() {
+    return (
+        <div>
+            {/* HERO */}
+            <section className="relative w-full">
+                <div className="relative h-[56vh] md:h-[72vh]">
+                    <img
+                        src={HERO_IMG}
+                        alt="Camión Ibercarga transportando aspa de aerogenerador"
+                        className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/25 to-transparent" />
+                    <div className="absolute inset-0 flex items-center">
+                        <div className="max-w-7xl mx-auto px-4">
+                            <h1 className="font-display text-white text-5xl md:text-7xl lg:text-8xl leading-[0.95] drop-shadow-[0_4px_24px_rgba(0,0,0,0.35)]">
+                                Ibercarga
+                            </h1>
+                            <p className="font-display text-white/95 max-w-3xl mt-4 text-2xl md:text-3xl lg:text-4xl drop-shadow-[0_3px_16px_rgba(0,0,0,0.35)]">
+                                Transporte especial y sobredimensionado en toda España:
+                                eólico, prefabricado de hormigón, industrial, transformadores y más.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Sección formulario con FONDO ÍNDIGO */}
+            <PresupuestoSection />
+
+            {/* Cómo funciona (resumen) */}
+            <section className="max-w-6xl mx-auto py-16 px-4 grid md:grid-cols-3 gap-10">
+                <div className="text-center">
+                    <Search className="w-10 h-10 mx-auto mb-4 text-indigo-700" />
+                    <h3 className="font-semibold mb-2">1. Publica tu carga</h3>
+                    <p className="text-gray-600 text-sm">Indica origen, destino, dimensiones, fechas y tipo de transporte especial.</p>
+                </div>
+                <div className="text-center">
+                    <ShieldCheck className="w-10 h-10 mx-auto mb-4 text-indigo-700" />
+                    <h3 className="font-semibold mb-2">2. Recibe ofertas seguras</h3>
+                    <p className="text-gray-600 text-sm">Transportistas verificados envían presupuestos. Elegimos la opción idónea contigo.</p>
+                </div>
+                <div className="text-center">
+                    <ArrowRight className="w-10 h-10 mx-auto mb-4 text-indigo-700" />
+                    <h3 className="font-semibold mb-2">3. Gestión total</h3>
+                    <p className="text-gray-600 text-sm">Coordinación integral, permisos y seguimiento hasta la entrega.</p>
+                </div>
+            </section>
+
+            {/* Galería */}
+            <section className="bg-gray-50 py-16 px-4">
+                <div className="max-w-7xl mx-auto">
+                    <div className="flex items-center gap-2 mb-6">
+                        <ImageIcon className="w-5 h-5 text-indigo-700" />
+                        <h2 className="text-2xl font-bold">Especialidades</h2>
+                    </div>
+                    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {GALLERY.map((g) => (
+                            <figure key={g.src} className="group relative rounded-2xl overflow-hidden shadow hover:shadow-lg transition">
+                                <img src={g.src} alt={g.title} className="w-full h-56 object-cover group-hover:scale-[1.02] transition" />
+                                <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-4 text-white">
+                                    <div className="font-semibold">{g.title}</div>
+                                </figcaption>
+                            </figure>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            <FAQSection />
+
+            <ContactoSection />
+        </div>
+    );
+}
+
+function PresupuestoSection() {
     const [form, setForm] = useState({
-        origen: "",
-        destino: "",
-        tipo: "",
-        piezas: "",
-        fecha: "",
-        nombre: "",
-        telefono: "",
-        email: "",
-        vehiculo: ""
+        origen: "", destino: "", tipo: "", vehiculo: "",
+        piezas: "", fecha: "", nombre: "", telefono: "", email: ""
     });
-    const [toast, setToast] = useState("");
+    const [toast, setToast] = useState(null);
 
     const onChange = (e) => setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
 
-    const handleSubmit = async (e) => {
+    async function enviarPresupuesto(e) {
         e.preventDefault();
+        setToast({ type: "loading", msg: "Enviando solicitud..." });
         try {
-            const res = await fetch("/api/send-quote", {
+            const r = await fetch("/api/send-quote", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(form),
             });
-            if (res.ok) {
-                alert("✅ Solicitud enviada con éxito");
-            } else {
-                alert("❌ Error al enviar la solicitud");
-            }
-        } catch (err) {
-            console.error(err);
-            alert("⚠️ Fallo de conexión con el servidor");
+            const data = await r.json();
+            if (!r.ok || !data.ok) throw new Error(data.error || "Error al enviar");
+            setToast({ type: "ok", msg: "¡Solicitud enviada! Te hemos enviado un correo de confirmación." });
+            setForm({ origen: "", destino: "", tipo: "", vehiculo: "", piezas: "", fecha: "", nombre: "", telefono: "", email: "" });
+        } catch {
+            setToast({ type: "err", msg: "No se pudo enviar. Intenta de nuevo o llámanos al " + PHONE });
         }
-    };
+    }
 
     return (
-        <div className="min-h-screen bg-white text-gray-900">
-            {/* NAV */}
-            <header className="sticky top-0 z-50 bg-white/90 backdrop-blur border-b">
-                <div className="max-w-7xl mx-auto px-4">
-                    <div className="h-16 flex items-center justify-between">
-                        <a href="#top" className="flex items-center gap-2">
-                            <Truck className="w-6 h-6" />
-                            <span className="font-bold text-lg">Ibercarga</span>
-                            <span className="hidden md:inline text-sm text-gray-500">· Colossal Movement</span>
-                        </a>
-                        <nav className="flex items-center gap-4 text-sm">
-                            <a href="#comofunciona" className="hover:text-indigo-700">Cómo funciona</a>
-                            <a href="#contacto" className="hover:text-indigo-700">Contacto</a>
-                            <a href="#presupuesto" className="hidden sm:inline px-3 py-1.5 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700">
-                                Obtener presupuesto
-                            </a>
-                        </nav>
-                    </div>
-                </div>
-            </header>
-
-            {/* HERO */}
-            <section id="top" className="relative bg-gradient-to-br from-indigo-700 via-blue-700 to-sky-600 text-white">
-                <div className="absolute inset-0 opacity-20 pointer-events-none" style={{ backgroundImage: "radial-gradient(white 1px, transparent 1px)", backgroundSize: "22px 22px" }} />
-                <div className="max-w-7xl mx-auto px-4 py-14 md:py-20 grid md:grid-cols-2 gap-10 items-center">
-                    <div>
-                        <h1 className="text-3xl md:text-5xl font-extrabold leading-tight">
-                            Ibercarga: ofertas para tu transporte especial
-                        </h1>
-                        <p className="mt-3 text-white/90">
-                            Publica tu ruta y tipo de carga. Transportistas verificados envían presupuestos en horas.
-                        </p>
-                        <ul className="mt-4 text-sm text-white/90 space-y-1">
-                            <li>• Sobredimensionado, industrial, prefabricado, eólico</li>
-                            <li>• Permisos, escoltas y documentación incluidos</li>
-                            <li>• Atención al cliente: <b>+34 624 473 123</b></li>
-                        </ul>
-                    </div>
-
-                    {/* Formulario principal */}
-                    <div className="bg-white text-gray-900 rounded-2xl shadow-xl border p-4 md:p-5" id="presupuesto">
-                        <div className="flex items-center gap-2 mb-2">
-                            <Search className="w-5 h-5 text-indigo-600" />
-                            <h3 className="font-semibold">Obtener presupuesto</h3>
+        <section className="bg-indigo-700 py-14 px-4">
+            <div className="max-w-7xl mx-auto">
+                {/* Tarjeta blanca para destacar sobre el azul */}
+                <div className="bg-white rounded-3xl shadow-2xl ring-1 ring-indigo-100 px-5 py-6 md:px-10 md:py-10">
+                    <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6 mb-6">
+                        <div>
+                            <h2 className="font-display text-3xl md:text-4xl text-gray-900">Obtener presupuesto</h2>
+                            <p className="text-gray-600 mt-2 text-sm md:text-base">
+                                Respuesta rápida. También puedes escribirnos a{" "}
+                                <a className="underline font-medium" href={`mailto:${EMAIL}`}>{EMAIL}</a>.
+                            </p>
                         </div>
-                        <form onSubmit={onSubmit} className="grid md:grid-cols-2 gap-3">
-                            <div className="relative">
-                                <MapPin className="w-4 h-4 absolute left-3 top-3 text-gray-500" />
-                                <input name="origen" value={form.origen} onChange={onChange} className="w-full pl-9 pr-3 py-2 rounded-lg border" placeholder="Origen (Ciudad o CP)" />
-                            </div>
-                            <div className="relative">
-                                <MapPin className="w-4 h-4 absolute left-3 top-3 text-gray-500" />
-                                <input name="destino" value={form.destino} onChange={onChange} className="w-full pl-9 pr-3 py-2 rounded-lg border" placeholder="Destino (Ciudad o CP)" />
-                            </div>
-                            <input name="tipo" value={form.tipo} onChange={onChange} className="w-full px-3 py-2 rounded-lg border md:col-span-2" placeholder="Tipo de carga (ej. vigas 30 m / transformador 75 t)" />
-                            <input name="piezas" type="number" min="1" value={form.piezas} onChange={onChange} className="w-full px-3 py-2 rounded-lg border" placeholder="Número de piezas" />
-                            <input name="fecha" type="date" value={form.fecha} onChange={onChange} className="w-full px-3 py-2 rounded-lg border" />
-                            <input name="nombre" value={form.nombre} onChange={onChange} className="w-full px-3 py-2 rounded-lg border" placeholder="Nombre u organización" />
-                            <input name="telefono" type="tel" value={form.telefono} onChange={onChange} className="w-full px-3 py-2 rounded-lg border" placeholder="Teléfono de contacto" />
-                            {/* Email del cliente */}
-                            <input name="email" type="email" value={form.email} onChange={onChange} className="w-full px-3 py-2 rounded-lg border md:col-span-2" placeholder="Correo electrónico" />
-                            {/* Vehículo */}
-                            <select name="vehiculo" value={form.vehiculo} onChange={onChange} className="w-full px-3 py-2 rounded-lg border md:col-span-2 bg-white">
-                                <option value="">Selector de vehículo</option>
-                                <option>Góndola</option>
-                                <option>Cama baja</option>
-                                <option>Extensible</option>
-                                <option>Especial sobredimensionado</option>
-                            </select>
-                            <button className="md:col-span-2 rounded-lg bg-indigo-600 text-white py-2 font-semibold hover:bg-indigo-700 flex items-center justify-center gap-2">
-                                <ArrowRight className="w-4 h-4" />
-                                Obtener presupuesto
-                            </button>
-                        </form>
-                        {toast && (
-                            <div className="mt-3 text-sm p-3 rounded-lg bg-emerald-50 border border-emerald-200 whitespace-pre-line">
-                                {toast}
-                            </div>
-                        )}
+                        <div className="hidden lg:block text-sm text-gray-600">
+                            <div className="font-semibold text-gray-800">Atención directa</div>
+                            <div>{PHONE}</div>
+                            <div>{EMAIL}</div>
+                        </div>
                     </div>
+
+                    <form onSubmit={enviarPresupuesto} className="grid md:grid-cols-4 gap-4">
+                        <input name="origen" value={form.origen} onChange={onChange} className="h-12 px-4 rounded-xl border focus:ring-2 focus:ring-indigo-200" placeholder="Origen" />
+                        <input name="destino" value={form.destino} onChange={onChange} className="h-12 px-4 rounded-xl border focus:ring-2 focus:ring-indigo-200" placeholder="Destino" />
+                        <input name="tipo" value={form.tipo} onChange={onChange} className="h-12 px-4 rounded-xl border focus:ring-2 focus:ring-indigo-200" placeholder="Tipo de carga" />
+                        <input name="vehiculo" value={form.vehiculo} onChange={onChange} className="h-12 px-4 rounded-xl border focus:ring-2 focus:ring-indigo-200" placeholder="Selector de vehículo" />
+                        <input name="piezas" value={form.piezas} onChange={onChange} className="h-12 px-4 rounded-xl border focus:ring-2 focus:ring-indigo-200" placeholder="Nº de piezas" />
+                        <input type="date" name="fecha" value={form.fecha} onChange={onChange} className="h-12 px-4 rounded-xl border focus:ring-2 focus:ring-indigo-200" />
+                        <input name="nombre" value={form.nombre} onChange={onChange} className="h-12 px-4 rounded-xl border focus:ring-2 focus:ring-indigo-200" placeholder="Nombre u organización" />
+                        <input name="telefono" value={form.telefono} onChange={onChange} className="h-12 px-4 rounded-xl border focus:ring-2 focus:ring-indigo-200" placeholder="Teléfono de contacto" />
+                        <input name="email" type="email" value={form.email} onChange={onChange} className="h-12 px-4 rounded-xl border focus:ring-2 focus:ring-indigo-200 md:col-span-2" placeholder="Correo electrónico" />
+                        <button className="h-12 bg-indigo-700 text-white rounded-xl hover:bg-indigo-800 md:col-span-2 shadow-lg">
+                            Obtener presupuesto
+                        </button>
+                    </form>
+
+                    {toast && (
+                        <div className={`mt-5 p-4 rounded-xl text-sm ${toast.type === "ok"
+                                ? "bg-emerald-50 border border-emerald-200"
+                                : toast.type === "err"
+                                    ? "bg-rose-50 border border-rose-200"
+                                    : "bg-gray-50 border"
+                            }`}>
+                            {toast.msg}
+                        </div>
+                    )}
                 </div>
-            </section>
+            </div>
+        </section>
+    );
+}
 
-            {/* Secciones adicionales */}
-            <TrustBar />
-            <CityChips />
-            <Categories />
-            <RecentListings />
-            <HowItWorks />
-            <Gallery />
-            <Testimonials />
-            <FAQ />
-
-            {/* CONTACTO */}
-            <section id="contacto" className="py-16 bg-gray-50 border-t">
-                <div className="max-w-7xl mx-auto px-4 grid md:grid-cols-2 gap-10">
+function FAQSection() {
+    return (
+        <section className="bg-gray-50 py-16 px-4">
+            <div className="max-w-4xl mx-auto">
+                <h2 className="text-2xl font-bold mb-8 text-center">Preguntas frecuentes</h2>
+                <div className="space-y-6 text-left">
                     <div>
-                        <h3 className="text-2xl font-bold mb-6">Contáctanos</h3>
-                        <form onSubmit={(e) => { e.preventDefault(); alert("Gracias por tu mensaje. Te contactaremos pronto."); }} className="grid gap-4">
-                            <input type="text" placeholder="Nombre" className="border px-4 py-3 rounded-lg" required />
-                            <input type="email" placeholder="Correo electrónico" className="border px-4 py-3 rounded-lg" required />
-                            <input type="tel" placeholder="Teléfono" className="border px-4 py-3 rounded-lg" required />
-                            <textarea placeholder="Mensaje" className="border px-4 py-3 rounded-lg" rows="5" required />
-                            <button className="bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700">Enviar</button>
-                        </form>
+                        <h3 className="font-medium">¿Qué tipo de cargas se pueden publicar?</h3>
+                        <p className="text-sm text-gray-600">Todas las cargas especiales: prefabricado, eólico, maquinaria industrial, transformadores, etc.</p>
                     </div>
                     <div>
-                        <h3 className="text-2xl font-bold mb-6">Información</h3>
-                        <ul className="space-y-2 text-gray-700">
-                            <li>📞 +34 624 473 123</li>
-                            <li>📧 contacto@ibercarga.com</li>
-                            <li>🏢 Castilla-La Mancha, España</li>
-                        </ul>
-                        <div className="mt-6 text-sm text-gray-500">Atendemos por WhatsApp y videollamada bajo cita.</div>
+                        <h3 className="font-medium">¿Cómo verifican a los transportistas?</h3>
+                        <p className="text-sm text-gray-600">Licencia, seguros y experiencia comprobada antes de aprobar perfiles y rutas.</p>
+                    </div>
+                    <div>
+                        <h3 className="font-medium">¿Tiene coste publicar?</h3>
+                        <p className="text-sm text-gray-600">Publicar es gratis. Solo pagas el transporte cuando confirmas la propuesta.</p>
                     </div>
                 </div>
-            </section>
+            </div>
+        </section>
+    );
+}
 
-            {/* FOOTER */}
-            <Footer />
+function ContactoSection() {
+    return (
+        <section id="contacto" className="pt-16">
+            <div className="max-w-5xl mx-auto px-4 grid md:grid-cols-2 gap-10">
+                <div>
+                    <h2 className="text-2xl font-bold mb-3">Contacto</h2>
+                    <p className="text-gray-600 mb-4">
+                        ¿Tienes dudas o prefieres que te llamemos? Escríbenos y te respondemos rápido.
+                    </p>
+                    <ul className="space-y-2 text-sm">
+                        <li className="flex items-center gap-2"><Phone className="w-4 h-4 text-indigo-700" /> {PHONE}</li>
+                        <li className="flex items-center gap-2"><Mail className="w-4 h-4 text-indigo-700" /> <a href={`mailto:${EMAIL}`} className="underline">{EMAIL}</a></li>
+                    </ul>
+                </div>
+                <div className="border rounded-2xl p-4">
+                    <iframe
+                        title="Mapa Ibercarga"
+                        className="w-full h-64 rounded-xl"
+                        src="https://www.openstreetmap.org/export/embed.html?bbox=-9.4%2C35.5%2C3.6%2C43.9&layer=mapnik"
+                    />
+                    <p className="text-xs text-gray-500 mt-2">Cobertura nacional: principales corredores y puertos de España.</p>
+                </div>
+            </div>
+
+            {/* FOOTER ÍNDIGO */}
+            <footer className="bg-indigo-700 text-indigo-100 mt-14">
+                <div className="max-w-7xl mx-auto px-4 py-8 text-sm flex flex-col md:flex-row items-center justify-between gap-2">
+                    <div>© {new Date().getFullYear()} Ibercarga. Todos los derechos reservados.</div>
+                    <div className="flex items-center gap-4">
+                        <a href={`mailto:${EMAIL}`} className="underline hover:text-white">{EMAIL}</a>
+                        <span>{PHONE}</span>
+                    </div>
+                </div>
+            </footer>
+        </section>
+    );
+}
+
+function Ofertas() {
+    const demoListings = [
+        { id: 1, title: "Transporte de 4 vigas prefabricadas 32 m", route: "Talavera → Madrid", budget: "7.800 €" },
+        { id: 2, title: "Movimiento de transformador 75 t", route: "Bilbao → Zaragoza", budget: "12.500 €" },
+        { id: 3, title: "Palas eólicas 58 m (3 uds)", route: "Cádiz → Tarifa", budget: "9.900 €" },
+    ];
+    return (
+        <div className="max-w-7xl mx-auto px-4 py-14">
+            <h2 className="text-2xl font-bold mb-6">Últimas solicitudes</h2>
+            <div className="grid md:grid-cols-3 gap-4">
+                {demoListings.map((l) => (
+                    <div key={l.id} className="p-5 rounded-2xl border bg-white shadow-sm">
+                        <div className="flex items-center gap-2 text-sm text-gray-600"><MapPin className="w-4 h-4" /> {l.route}</div>
+                        <h3 className="mt-2 font-semibold">{l.title}</h3>
+                        <div className="mt-2 text-sm">Presupuesto de referencia: {l.budget}</div>
+                        <button className="mt-4 w-full bg-indigo-700 text-white rounded-xl py-2 hover:bg-indigo-800">Enviar oferta</button>
+                    </div>
+                ))}
+            </div>
         </div>
+    );
+}
+
+function ComoFunciona() {
+    return (
+        <div className="max-w-6xl mx-auto px-4 py-14">
+            <h2 className="text-2xl font-bold mb-6">Cómo funciona Ibercarga</h2>
+            <ol className="list-decimal pl-6 space-y-3 text-gray-700">
+                <li>Publicas tu necesidad (origen, destino, tipo, medidas, fechas).</li>
+                <li>Validamos la viabilidad, permisos y flota adecuada.</li>
+                <li>Recibes propuesta con precio y planificación.</li>
+                <li>Asignamos flota y coordinamos operación y seguimiento.</li>
+                <li>Entrega y cierre con documentación.</li>
+            </ol>
+            <div className="mt-8">
+                <Link to="/" className="inline-block bg-indigo-700 text-white px-5 py-2 rounded-lg hover:bg-indigo-800">Solicitar presupuesto</Link>
+            </div>
+        </div>
+    );
+}
+
+// -------------------- App ----------------------
+export default function App() {
+    return (
+        <Router>
+            <div className="min-h-screen bg-white text-gray-900">
+                <Navbar />
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/ofertas" element={<Ofertas />} />
+                    <Route path="/como-funciona" element={<ComoFunciona />} />
+                </Routes>
+            </div>
+        </Router>
     );
 }
