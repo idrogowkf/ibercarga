@@ -1,14 +1,67 @@
+// api/send-quote.js
 const { Resend } = require("resend");
 
-module.exports = async (req, res) => {
-    if (req.method !== "POST") {
-        res.statusCode = 405;
-        res.setHeader("Allow", "POST");
-        return res.end("");
-    }
+/** Util: validación básica de email */
+function isEmail(x) {
+    return typeof x === "string" && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(x);
+}
 
+/** HTML muy simple para el correo (empresa y cliente) */
+function emailHtml({ origen, destino, tipo, piezas, fecha, nombre, telefono, email, vehiculo }) {
+    return `
+  <div style="font-family:Inter,system-ui,Arial,sans-serif;max-width:640px;margin:0 auto;padding:24px;border:1px solid #e5e7eb;border-radius:12px">
+    <h1 style="margin:0 0 8px 0;font-size:22px;color:#111827">Nueva solicitud de presupuesto</h1>
+    <p style="margin:0 0 16px 0;color:#374151">Ibercarga · Transporte especial</p>
+    <table style="width:100%;border-collapse:collapse">
+      <tbody>
+        ${[
+            ["Origen", origen],
+            ["Destino", destino],
+            ["Tipo de carga", tipo],
+            ["Piezas", piezas],
+            ["Fecha", fecha],
+            ["Vehículo", vehiculo],
+            ["Nombre / Organización", nombre],
+            ["Teléfono", telefono],
+            ["Email contacto", email],
+        ]
+            .map(
+                ([k, v]) => `
+        <tr>
+          <td style="padding:8px 0;color:#6b7280;width:40%">${k}</td>
+          <td style="padding:8px 0;color:#111827;font-weight:600">${v || "-"}</td>
+        </tr>`
+            )
+            .join("")}
+      </tbody>
+    </table>
+    <hr style="border:none;border-top:1px solid #e5e7eb;margin:20px 0"/>
+    <p style="margin:0;color:#374151">Gracias por usar Ibercarga. Responderemos lo antes posible.</p>
+  </div>
+  `;
+}
+
+module.exports = async (req, res) => {
     try {
-        const body = await readJson(req);
+        // 1) Ping rápido
+        if (req.method === "GET") {
+            if (req.query && ("ping" in req.query)) {
+                res.statusCode = 200;
+                res.setHeader("Content-Type", "application/json; charset=utf-8");
+                return res.end(JSON.stringify({ ok: true, route: "send-quote", mode: "GET-ping" }));
+            }
+            res.statusCode = 405;
+            res.setHeader("Allow", "POST");
+            return res.end("Method Not Allowed");
+        }
+
+        if (req.method !== "POST") {
+            res.statusCode = 405;
+            res.setHeader("Allow", "POST");
+            return res.end("Method Not Allowed");
+        }
+
+        // 2) Body
         const {
             origen = "",
             destino = "",
@@ -18,145 +71,84 @@ module.exports = async (req, res) => {
             nombre = "",
             telefono = "",
             email = "",
-            vehiculo = ""
-        } = body || {};
+            vehiculo = "",
+        } = typeof req.body === "object" && req.body ? req.body : {};
 
-        if (!origen || !destino || !tipo || !email || !nombre) {
-            return json(res, 400, { ok: false, error: "Campos requeridos: origen, destino, tipo, nombre, email" });
+        // 3) Validación mínima
+        if (!origen || !destino || !tipo || !vehiculo || !isEmail(email)) {
+            res.statusCode = 400;
+            res.setHeader("Content-Type", "application/json; charset=utf-8");
+            return res.end(
+                JSON.stringify({
+                    ok: false,
+                    error: "Campos inválidos",
+                    hint: "Requiere origen, destino, tipo, vehiculo, email válido",
+                })
+            );
         }
 
-        const RESEND_API_KEY = process.env.RESEND_API_KEY;
-        const FROM_EMAIL = process.env.FROM_EMAIL || "Ibercarga <no-reply@ibercarga.com>";
-        const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "transporte@ibercarga.com";
+        // 4) Entorno / Resend
+        const API_KEY = process.env.RESEND_API_KEY;
+        let FROM = process.env.FROM_EMAIL;
 
-        if (!RESEND_API_KEY) {
-            return json(res, 500, { ok: false, error: "Falta RESEND_API_KEY" });
+        if (!API_KEY) {
+            // Error claro si falta la clave
+            res.statusCode = 500;
+            res.setHeader("Content-Type", "application/json; charset=utf-8");
+            return res.end(JSON.stringify({ ok: false, error: "Falta RESEND_API_KEY en Vercel" }));
         }
 
-        const resend = new Resend(RESEND_API_KEY);
-        const now = new Date().toLocaleString("es-ES");
+        // Remitente: si no hay FROM_EMAIL válido, caer a onboarding
+        if (!FROM || !isEmail((FROM.match(/<(.+)>/) || [])[1] || FROM)) {
+            FROM = "onboarding@resend.dev";
+        }
 
-        const adminHtml = `
-      <div style="font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;max-width:720px;margin:auto">
-        <h2 style="margin:0 0 4px">Nueva solicitud de presupuesto</h2>
-        <div style="color:#666;font-size:13px;margin-bottom:12px">${now}</div>
-        <table style="width:100%;border-collapse:collapse;font-size:14px;color:#222">
-          ${row("Origen", origen)}
-          ${row("Destino", destino)}
-          ${row("Tipo de carga", tipo)}
-          ${row("Vehículo", vehiculo)}
-          ${row("Nº de piezas", piezas)}
-          ${row("Fecha", fecha)}
-          ${row("Nombre/Org.", nombre)}
-          ${row("Teléfono", telefono)}
-          ${row("Email (cliente)", email)}
-        </table>
-        <p style="font-size:13px;color:#444;margin-top:12px">
-          Respondiendo a este correo, contactarás al cliente (Reply-To).
-        </p>
-      </div>
-    `;
+        // Dirección de la empresa (aquí recibirás siempre)
+        const TO_EMPRESA = "transporte@ibercarga.com";
 
-        const resumenHtml = `
-      <table style="font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;width:100%;max-width:640px;margin:auto;border-collapse:collapse">
-        <tr>
-          <td style="padding:16px 0;text-align:center">
-            <img src="https://ibercarga.com/favicon.svg" alt="Ibercarga" width="44" height="44" style="display:inline-block;margin-bottom:8px" />
-            <div style="font-size:20px;font-weight:700;color:#111">Ibercarga</div>
-            <div style="color:#666;font-size:13px">Solicitud recibida • ${now}</div>
-          </td>
-        </tr>
-        <tr>
-          <td style="background:#0d47a1;color:#fff;padding:16px 20px;border-radius:12px">
-            <div style="font-size:16px;font-weight:600;margin-bottom:4px">Resumen de la solicitud</div>
-            <div style="opacity:.9;font-size:14px">Gracias, ${escapeHtml(nombre)}. Te contactaremos muy pronto.</div>
-          </td>
-        </tr>
-        <tr><td style="height:8px"></td></tr>
-        <tr>
-          <td style="border:1px solid #eee;border-radius:12px;padding:16px">
-            <table style="width:100%;border-collapse:collapse;font-size:14px;color:#222">
-              ${row("Origen", origen)}
-              ${row("Destino", destino)}
-              ${row("Tipo de carga", tipo)}
-              ${row("Vehículo", vehiculo)}
-              ${row("Nº de piezas", piezas)}
-              ${row("Fecha", fecha)}
-              ${row("Nombre/Org.", nombre)}
-              ${row("Teléfono", telefono)}
-              ${row("Email", email)}
-            </table>
-          </td>
-        </tr>
-        <tr><td style="height:12px"></td></tr>
-        <tr>
-          <td style="color:#666;font-size:12px;text-align:center">
-            Ibercarga · ${PHONE_FOOTER()} · transporte@ibercarga.com
-          </td>
-        </tr>
-      </table>
-    `;
+        const resend = new Resend(API_KEY);
 
-        // 1) para empresa
-        const adminSend = await resend.emails.send({
-            from: FROM_EMAIL,
-            to: [ADMIN_EMAIL],
-            subject: `Nueva solicitud • ${origen} → ${destino} • ${tipo}`,
-            html: adminHtml,
-            reply_to: email
+        const subject = `Ibercarga – Presupuesto de ${origen} a ${destino} (${tipo})`;
+
+        // 5) Enviar a la empresa
+        const adminResp = await resend.emails.send({
+            from: FROM,               // p.ej. "no-reply@ibercarga.com" verificado, o onboarding@resend.dev
+            to: [TO_EMPRESA],
+            reply_to: isEmail(email) ? email : undefined,
+            subject,
+            html: emailHtml({ origen, destino, tipo, piezas, fecha, nombre, telefono, email, vehiculo }),
         });
 
-        // 2) para cliente
-        const clientSend = await resend.emails.send({
-            from: FROM_EMAIL,
+        // 6) Enviar al cliente (copia con agradecimiento)
+        const clienteResp = await resend.emails.send({
+            from: FROM,
             to: [email],
-            subject: "Hemos recibido tu solicitud • Ibercarga",
-            html: resumenHtml
+            subject: "Ibercarga – Hemos recibido tu solicitud de presupuesto",
+            html: emailHtml({ origen, destino, tipo, piezas, fecha, nombre, telefono, email, vehiculo }),
         });
 
-        return json(res, 200, { ok: true, adminId: adminSend?.id || null, clientId: clientSend?.id || null });
+        res.statusCode = 200;
+        res.setHeader("Content-Type", "application/json; charset=utf-8");
+        return res.end(
+            JSON.stringify({
+                ok: true,
+                delivered: {
+                    empresa: adminResp?.id ? true : false,
+                    cliente: clienteResp?.id ? true : false,
+                },
+            })
+        );
     } catch (err) {
-        console.error("send-quote error:", err);
-        return json(res, 500, { ok: false, error: toSafeError(err) });
+        // Error detallado (sin exponer claves)
+        res.statusCode = 500;
+        res.setHeader("Content-Type", "application/json; charset=utf-8");
+        return res.end(
+            JSON.stringify({
+                ok: false,
+                error: String(err && err.message ? err.message : err),
+                name: err && err.name,
+                code: err && (err.code || err.statusCode),
+            })
+        );
     }
 };
-
-// utils
-function PHONE_FOOTER() {
-    return "+34 624 473 123";
-}
-
-function readJson(req) {
-    return new Promise((resolve, reject) => {
-        let data = "";
-        req.on("data", (c) => (data += c));
-        req.on("end", () => {
-            try { resolve(JSON.parse(data || "{}")); } catch (e) { reject(e); }
-        });
-        req.on("error", reject);
-    });
-}
-
-function json(res, code, obj) {
-    res.statusCode = code;
-    res.setHeader("Content-Type", "application/json; charset=utf-8");
-    res.end(JSON.stringify(obj));
-}
-
-function row(label, value) {
-    return `
-    <tr>
-      <td style="padding:8px 0;color:#666;width:160px">${escapeHtml(label)}</td>
-      <td style="padding:8px 0;font-weight:600">${escapeHtml(value || "-")}</td>
-    </tr>
-  `;
-}
-
-function escapeHtml(str = "") {
-    return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-}
-
-function toSafeError(e) {
-    try { return e?.name || e?.message ? { name: e.name, message: e.message } : { message: String(e) }; }
-    catch { return { message: "unknown" }; }
-}
