@@ -2,7 +2,9 @@
   "name": "ibercarga",
   "version": "1.0.0",
   "private": true,
-  "engines": { "node": "22.x" },
+  "engines": {
+    "node": "22.x"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -12,12 +14,13 @@
     "lucide-react": "^0.446.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.26.1"
+    "react-router-dom": "^6.26.1",
+    "resend": "^6.0.3"
   },
   "devDependencies": {
-    "vite": "^5.4.8",
-    "tailwindcss": "3.4.14",
+    "autoprefixer": "^10.4.20",
     "postcss": "^8.4.45",
-    "autoprefixer": "^10.4.20"
+    "tailwindcss": "3.4.14",
+    "vite": "^5.4.8"
   }
 }
