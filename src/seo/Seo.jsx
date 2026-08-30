@@ -1,62 +1,57 @@
 import { useEffect } from 'react';
+import { buildHreflang } from './hreflang';
+import { buildMeta } from './meta';
+import { breadcrumbSchema, faqSchema, organizationSchema, serviceSchema } from './schema';
 
-const SITE_URL = 'https://ibercarga.com';
-const DEFAULT_IMAGE = `${SITE_URL}/hero/ibercarga-aspa.jpg`;
-
-function setMeta(selector, attributes) {
+function upsertMeta(selector, attributes) {
   let node = document.head.querySelector(selector);
-  if (!node) {
-    node = document.createElement('meta');
-    document.head.appendChild(node);
-  }
+  if (!node) { node = document.createElement('meta'); document.head.appendChild(node); }
   Object.entries(attributes).forEach(([key, value]) => node.setAttribute(key, value));
 }
 
-function setLink(rel, href, hreflang) {
-  const selector = hreflang
-    ? `link[rel="${rel}"][hreflang="${hreflang}"]`
-    : `link[rel="${rel}"]:not([hreflang])`;
-  let node = document.head.querySelector(selector);
-  if (!node) {
-    node = document.createElement('link');
-    node.rel = rel;
-    if (hreflang) node.hreflang = hreflang;
-    document.head.appendChild(node);
-  }
-  node.href = href;
-}
-
-export default function Seo({ title, description, path = '/', language = 'es', alternatePath, schema = [] }) {
+export default function Seo({ page }) {
   useEffect(() => {
-    const canonical = `${SITE_URL}${path === '/' ? '/' : path}`;
-    document.title = `${title} | Ibercarga`;
-    document.documentElement.lang = language;
+    const meta = buildMeta(page);
+    document.title = meta.title;
+    document.documentElement.lang = page.language;
+    const entries = [
+      ['meta[name="description"]', { name: 'description', content: meta.description }],
+      ['meta[property="og:type"]', { property: 'og:type', content: meta.openGraph.type }],
+      ['meta[property="og:site_name"]', { property: 'og:site_name', content: meta.openGraph.siteName }],
+      ['meta[property="og:title"]', { property: 'og:title', content: meta.openGraph.title }],
+      ['meta[property="og:description"]', { property: 'og:description', content: meta.openGraph.description }],
+      ['meta[property="og:url"]', { property: 'og:url', content: meta.openGraph.url }],
+      ['meta[property="og:image"]', { property: 'og:image', content: meta.openGraph.image }],
+      ['meta[property="og:locale"]', { property: 'og:locale', content: meta.openGraph.locale }],
+      ['meta[name="twitter:card"]', { name: 'twitter:card', content: meta.twitter.card }],
+      ['meta[name="twitter:title"]', { name: 'twitter:title', content: meta.twitter.title }],
+      ['meta[name="twitter:description"]', { name: 'twitter:description', content: meta.twitter.description }],
+      ['meta[name="twitter:image"]', { name: 'twitter:image', content: meta.twitter.image }],
+    ];
+    entries.forEach(([selector, attributes]) => upsertMeta(selector, attributes));
 
-    setMeta('meta[name="description"]', { name: 'description', content: description });
-    setMeta('meta[property="og:title"]', { property: 'og:title', content: `${title} | Ibercarga` });
-    setMeta('meta[property="og:description"]', { property: 'og:description', content: description });
-    setMeta('meta[property="og:url"]', { property: 'og:url', content: canonical });
-    setMeta('meta[property="og:image"]', { property: 'og:image', content: DEFAULT_IMAGE });
-    setMeta('meta[property="og:locale"]', { property: 'og:locale', content: language === 'es' ? 'es_ES' : 'en_GB' });
-    setMeta('meta[name="twitter:card"]', { name: 'twitter:card', content: 'summary_large_image' });
-    setMeta('meta[name="twitter:title"]', { name: 'twitter:title', content: `${title} | Ibercarga` });
-    setMeta('meta[name="twitter:description"]', { name: 'twitter:description', content: description });
-    setLink('canonical', canonical);
-    setLink('alternate', canonical, language);
-    if (alternatePath) setLink('alternate', `${SITE_URL}${alternatePath}`, language === 'es' ? 'en' : 'es');
-    setLink('alternate', `${SITE_URL}/`, 'x-default');
-
-    document.querySelectorAll('script[data-ibercarga-schema]').forEach((node) => node.remove());
-    schema.forEach((entry) => {
-      const node = document.createElement('script');
-      node.type = 'application/ld+json';
-      node.dataset.ibercargaSchema = 'true';
-      node.text = JSON.stringify(entry);
-      document.head.appendChild(node);
+    document.head.querySelectorAll('[data-ibercarga-seo-link]').forEach((node) => node.remove());
+    const canonical = document.head.querySelector('link[rel="canonical"]') || document.createElement('link');
+    canonical.rel = 'canonical'; canonical.href = meta.canonical; canonical.dataset.ibercargaSeoLink = 'true';
+    if (!canonical.parentNode) document.head.appendChild(canonical);
+    buildHreflang(page).forEach(({ hreflang, href }) => {
+      const link = document.createElement('link');
+      link.rel = 'alternate'; link.hreflang = hreflang; link.href = href; link.dataset.ibercargaSeoLink = 'true';
+      document.head.appendChild(link);
     });
 
-    return () => document.querySelectorAll('script[data-ibercarga-schema]').forEach((node) => node.remove());
-  }, [title, description, path, language, alternatePath, schema]);
-
+    document.head.querySelectorAll('script[data-ibercarga-schema]').forEach((node) => node.remove());
+    const homePath = page.language === 'es' ? '/' : '/en/';
+    const homeName = page.language === 'es' ? 'Inicio' : 'Home';
+    const crumbs = page.type === 'home' ? [{ name: homeName, path: page.path }] : [{ name: homeName, path: homePath }, { name: page.heading, path: page.path }];
+    [organizationSchema, serviceSchema(page), faqSchema(page.faq), breadcrumbSchema(crumbs)].forEach((schema) => {
+      const script = document.createElement('script');
+      script.type = 'application/ld+json'; script.dataset.ibercargaSchema = 'true'; script.textContent = JSON.stringify(schema);
+      document.head.appendChild(script);
+    });
+    return () => {
+      document.head.querySelectorAll('[data-ibercarga-seo-link], script[data-ibercarga-schema]').forEach((node) => node.remove());
+    };
+  }, [page]);
   return null;
 }

@@ -1,86 +1,79 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 import Alert from './Alert';
 
-const initialForm = {
-  origen: '', destino: '', tipo: '', vehiculo: 'Góndola cama baja', piezas: 1,
-  fecha: '', nombre: '', telefono: '', email: ''
+const initialForm = { origen: '', destino: '', tipo: '', vehiculo: 'Góndola cama baja', piezas: 1, fecha: '', nombre: '', telefono: '', email: '' };
+
+const copy = {
+  es: {
+    origin: 'Origen (Ciudad o CP)', destination: 'Destino (Ciudad o CP)', cargo: 'Tipo de carga (ej. vigas 30m, 4 uds)',
+    vehicle: 'Vehículo', pieces: 'Número de piezas', date: 'Fecha del servicio', name: 'Nombre o empresa', phone: 'Teléfono',
+    email: 'Correo electrónico', submit: 'Obtener presupuesto', sending: 'Enviando...',
+    success: '¡Solicitud enviada! Te hemos enviado una copia por email y el equipo de Ibercarga la está revisando.',
+    error: 'No pudimos enviar tu solicitud. Inténtalo de nuevo en un momento.', apiError: 'La API no devolvió ok=true',
+  },
+  en: {
+    origin: 'Origin (city or postcode)', destination: 'Destination (city or postcode)', cargo: 'Cargo type (for example, a 30 m beam)',
+    vehicle: 'Vehicle', pieces: 'Number of pieces', date: 'Service date', name: 'Name or company', phone: 'Telephone',
+    email: 'Email address', submit: 'Request a quote', sending: 'Sending...',
+    success: 'Request sent. We have emailed you a copy and the Ibercarga team is reviewing the operation.',
+    error: 'We could not send your request. Please try again in a moment.', apiError: 'The API did not return ok=true',
+  },
 };
 
-export default function QuoteForm({ language = 'es', source = 'website' }) {
-  const [form, setForm] = useState(initialForm);
+const vehicleOptions = [
+  ['Góndola cama baja', 'Low-loader'], ['Portavigas extensible', 'Extendable beam trailer'],
+  ['Plataforma extensible', 'Extendable flatbed'], ['Modular hidráulico (SPMT)', 'Self-propelled modular transporter (SPMT)'],
+  ['Transportador de palas eólicas', 'Wind turbine blade transporter'], ['Multiaxial (8-14 ejes)', 'Multi-axle trailer (8-14 axles)'],
+];
+
+export default function QuoteForm({ language = 'es' }) {
+  const labels = copy[language] || copy.es;
+  const english = language === 'en';
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState(null);
-
-  const copy = language === 'es' ? {
-    origin: 'Origen (Ciudad o CP)', destination: 'Destino (Ciudad o CP)', cargo: 'Tipo de carga, dimensiones y peso',
-    vehicle: 'Vehículo orientativo', pieces: 'Número de piezas', date: 'Fecha prevista', name: 'Nombre o empresa',
-    phone: 'Teléfono', email: 'Correo electrónico', submit: 'Hablar con un consultor', sending: 'Enviando…',
-    success: 'Solicitud enviada. Un consultor de Ibercarga revisará la información y se pondrá en contacto contigo.',
-    error: 'No pudimos enviar la solicitud. Llámanos al +34 624 473 123 o inténtalo de nuevo.'
-  } : {
-    origin: 'Origin (city or postcode)', destination: 'Destination (city or postcode)', cargo: 'Cargo type, dimensions and weight',
-    vehicle: 'Indicative equipment', pieces: 'Number of pieces', date: 'Preferred date', name: 'Name or company',
-    phone: 'Telephone', email: 'Email address', submit: 'Speak to a consultant', sending: 'Sending…',
-    success: 'Request sent. An Ibercarga consultant will review the details and contact you.',
-    error: 'The request could not be sent. Call +34 624 473 123 or try again.'
-  };
-
-  function update(event) {
+  const [ok, setOk] = useState(null);
+  const [msg, setMsg] = useState('');
+  const [form, setForm] = useState(initialForm);
+  function onChange(event) {
     const { name, value, type } = event.target;
-    setForm((current) => ({ ...current, [name]: type === 'number' ? Number(value) : value }));
+    setForm((current) => ({ ...current, [name]: name === 'piezas' || type === 'number' ? Number(value) : value }));
   }
-
-  async function submit(event) {
-    event.preventDefault();
-    setLoading(true);
-    setResult(null);
+  async function onSubmit(event) {
+    event.preventDefault(); setOk(null); setMsg('');
     try {
-      const response = await fetch('/api/send-quote', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...form, source, language })
-      });
-      const payload = await response.json().catch(() => ({}));
-      if (!response.ok || !payload.ok) throw new Error('Quote request failed');
-      setResult({ type: 'success', text: copy.success });
-      setForm(initialForm);
-      window.dataLayer?.push({ event: 'quote_request_success', quote_source: source, language });
+      setLoading(true);
+      const response = await fetch('/api/send-quote', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(form) });
+      if (!response.ok) { const text = await response.text().catch(() => ''); throw new Error(`Error HTTP ${response.status}${text ? `: ${text}` : ''}`); }
+      const data = await response.json().catch(() => ({}));
+      if (!data?.ok) throw new Error(labels.apiError);
+      setOk(true); setMsg(labels.success);
+      setForm((current) => ({ ...current, tipo: '', piezas: 1, fecha: '', nombre: '', telefono: '', email: '' }));
     } catch (error) {
-      console.error(error);
-      setResult({ type: 'error', text: copy.error });
-      window.dataLayer?.push({ event: 'quote_request_error', quote_source: source, language });
-    } finally {
-      setLoading(false);
-    }
+      console.error(error); setOk(false); setMsg(labels.error);
+    } finally { setLoading(false); }
   }
-
-  const field = 'w-full rounded-lg border border-slate-300 px-3 py-2.5 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-200';
-
   return (
-    <form onSubmit={submit} className="grid grid-cols-1 gap-4 rounded-2xl bg-white p-6 shadow-xl md:grid-cols-2">
-      <input name="origen" value={form.origen} onChange={update} className={field} placeholder={copy.origin} required />
-      <input name="destino" value={form.destino} onChange={update} className={field} placeholder={copy.destination} required />
-      <textarea name="tipo" value={form.tipo} onChange={update} className={`${field} md:col-span-2`} placeholder={copy.cargo} rows="3" required />
-      <div>
-        <label className="mb-1 block text-sm text-slate-600">{copy.vehicle}</label>
-        <select name="vehiculo" value={form.vehiculo} onChange={update} className={`${field} bg-white`}>
-          <option>Góndola cama baja</option><option>Portavigas extensible</option><option>Plataforma extensible</option>
-          <option>Modular hidráulico / SPMT</option><option>Transportador eólico</option><option>Por determinar</option>
-        </select>
+    <form id="presupuesto" onSubmit={onSubmit} className="quoteCard">
+      <h2>{english ? 'Request a tailored transport quote' : 'Obtén tu presupuesto en minutos'}</h2>
+      <p>{english ? 'Complete the essential details. We will only request the technical information required for the operation.' : 'Completa los datos esenciales. Después solicitaremos únicamente la información técnica necesaria para la operación.'}</p>
+      <div className="steps" aria-hidden="true"><span className="step on">1</span><span className="line" /><span className="step">2</span><span className="line" /><span className="step">3</span></div>
+      <div className="quoteGrid">
+        <div><label htmlFor="origen">{labels.origin}</label><input id="origen" name="origen" value={form.origen} onChange={onChange} placeholder={labels.origin} required /></div>
+        <div><label htmlFor="destino">{labels.destination}</label><input id="destino" name="destino" value={form.destino} onChange={onChange} placeholder={labels.destination} required /></div>
       </div>
-      <div>
-        <label className="mb-1 block text-sm text-slate-600">{copy.pieces}</label>
-        <input name="piezas" type="number" min="1" value={form.piezas} onChange={update} className={field} required />
+      <label htmlFor="tipo">{labels.cargo}</label><input id="tipo" name="tipo" value={form.tipo} onChange={onChange} placeholder={labels.cargo} required />
+      <div className="quoteGrid">
+        <div><label htmlFor="vehiculo">{labels.vehicle}</label><select id="vehiculo" name="vehiculo" value={form.vehiculo} onChange={onChange} required>{vehicleOptions.map(([value, translated]) => <option key={value} value={value}>{english ? translated : value}</option>)}</select></div>
+        <div><label htmlFor="piezas">{labels.pieces}</label><input id="piezas" name="piezas" type="number" min={1} step={1} value={form.piezas} onChange={onChange} required /></div>
+        <div><label htmlFor="fecha">{labels.date}</label><input id="fecha" name="fecha" type="date" value={form.fecha} onChange={onChange} required /></div>
+        <div><label htmlFor="nombre">{labels.name}</label><input id="nombre" name="nombre" value={form.nombre} onChange={onChange} placeholder={labels.name} required /></div>
+        <div><label htmlFor="telefono">{labels.phone}</label><input id="telefono" name="telefono" value={form.telefono} onChange={onChange} placeholder={labels.phone} required /></div>
+        <div><label htmlFor="email">{labels.email}</label><input id="email" name="email" type="email" value={form.email} onChange={onChange} placeholder={labels.email} required /></div>
       </div>
-      <div><label className="mb-1 block text-sm text-slate-600">{copy.date}</label><input name="fecha" type="date" value={form.fecha} onChange={update} className={field} required /></div>
-      <input name="nombre" value={form.nombre} onChange={update} className={field} placeholder={copy.name} required />
-      <input name="telefono" value={form.telefono} onChange={update} className={field} placeholder={copy.phone} required />
-      <input name="email" type="email" value={form.email} onChange={update} className={field} placeholder={copy.email} required />
-      <button disabled={loading} className="flex items-center justify-center gap-2 rounded-xl bg-indigo-700 px-5 py-3 font-semibold text-white hover:bg-indigo-800 disabled:opacity-60 md:col-span-2">
-        {loading ? copy.sending : <>{copy.submit}<ArrowRight size={18} /></>}
-      </button>
-      {result && <Alert type={result.type} onClose={() => setResult(null)}>{result.text}</Alert>}
+      <button type="submit" disabled={loading} className="btn btnPrimary">{loading ? labels.sending : <>{labels.submit} <ArrowRight size={18} /></>}</button>
+      <div className="secure">{english ? 'Secure request · Direct technical review' : 'Solicitud segura · Revisión técnica directa'}</div>
+      {ok === true && <Alert type="success" onClose={() => setOk(null)}>{msg}</Alert>}
+      {ok === false && <Alert type="error" onClose={() => setOk(null)}>{msg}</Alert>}
     </form>
   );
 }

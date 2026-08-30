@@ -1,36 +1,29 @@
-import { Menu, Phone, Truck, X } from 'lucide-react';
-import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React from 'react';
 
-export default function Header({ language = 'es' }) {
-  const [open, setOpen] = useState(false);
-  const location = useLocation();
-  const home = language === 'es' ? '/' : '/en/';
-  const servicesLabel = language === 'es' ? 'Servicios' : 'Services';
-  const quoteLabel = language === 'es' ? 'Presupuesto' : 'Quote';
-  const languageHref = language === 'es' ? '/en/' : '/';
-
+export default function Header({ language = 'es', home = true }) {
+  const prefix = language === 'es' ? '' : '/en';
+  const anchor = (id) => `${home ? '' : prefix || '/'}#${id}`;
+  const labels = language === 'es'
+    ? { quote: 'Solicitar presupuesto', services: 'Soluciones', technical: 'Centro técnico', process: 'Cómo trabajamos', contact: 'Contacto', tagline: 'Transporte especial' }
+    : { quote: 'Request a quote', services: 'Solutions', technical: 'Technical centre', process: 'How we work', contact: 'Contact', tagline: 'Special transport' };
   return (
-    <header className="sticky top-0 z-40 bg-indigo-900 text-white shadow-md">
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4">
-        <Link to={home} className="flex items-center gap-2" aria-label="Ibercarga home"><Truck size={23}/><span className="font-display text-xl">IBERCARGA</span></Link>
-        <nav className="hidden items-center gap-6 md:flex">
-          <Link to={home} className="hover:text-indigo-200">{language === 'es' ? 'Inicio' : 'Home'}</Link>
-          <a href="#servicios" className="hover:text-indigo-200">{servicesLabel}</a>
-          <a href="#presupuesto" className="hover:text-indigo-200">{quoteLabel}</a>
-          <Link to={languageHref} className="rounded border border-indigo-500 px-2 py-1 text-sm">{language === 'es' ? 'EN' : 'ES'}</Link>
+    <header className="v12-header">
+      <div className="wrap topin">
+        <a href={home ? '#' : prefix || '/'} className="brand" aria-label={language === 'es' ? 'Ibercarga, inicio' : 'Ibercarga, home'}>
+          <span className="mark" aria-hidden="true"><i /><i /><i /></span>
+          <span><strong>Ibercarga</strong><small>{labels.tagline}</small></span>
+        </a>
+        <nav aria-label={language === 'es' ? 'Navegación principal' : 'Main navigation'}>
+          <a href={anchor('precios')}>{labels.services}</a>
+          <a href={anchor('informacion')}>{labels.technical}</a>
+          <a href={anchor('como-funciona')}>{labels.process}</a>
+          <a href={anchor('contacto')}>{labels.contact}</a>
         </nav>
-        <div className="flex items-center gap-2">
-          <a href="tel:+34624473123" className="flex items-center gap-2 rounded-lg bg-white px-3 py-2 text-indigo-900"><Phone size={17}/><span className="hidden sm:inline">+34 624 473 123</span></a>
-          <button className="md:hidden" onClick={() => setOpen(!open)} aria-label="Abrir menú">{open ? <X/> : <Menu/>}</button>
+        <div className="headActions">
+          <a className="btn lang" href={language === 'es' ? '/en' : '/'}>{language === 'es' ? 'ES ▾' : 'EN ▾'}</a>
+          <a href={anchor('presupuesto')} className="btn btnPrimary">{labels.quote}</a>
         </div>
       </div>
-      {open && <nav className="space-y-3 border-t border-indigo-700 px-4 py-4 md:hidden">
-        <Link onClick={() => setOpen(false)} to={home} className="block">{language === 'es' ? 'Inicio' : 'Home'}</Link>
-        <a onClick={() => setOpen(false)} href="#servicios" className="block">{servicesLabel}</a>
-        <a onClick={() => setOpen(false)} href="#presupuesto" className="block">{quoteLabel}</a>
-        <Link onClick={() => setOpen(false)} to={languageHref} className="block">{language === 'es' ? 'English' : 'Español'}</Link>
-      </nav>}
     </header>
   );
 }

@@ -1,28 +1,61 @@
-import { ArrowRight, CheckCircle2, ClipboardList, Route, UserRound } from 'lucide-react';
+import React from 'react';
+import { ArrowRight, Info, Truck } from 'lucide-react';
+import CTA from '../components/CTA';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
-import QuoteForm from '../components/QuoteForm';
-import ServiceCards from '../components/ServiceCards';
+import Hero from '../components/Hero';
 import Seo from '../seo/Seo';
-import { organizationSchema } from '../seo/schema';
 
-export default function HomePage({ language = 'es' }) {
-  const es = language === 'es';
-  return <>
-    <Seo title={es ? 'Transporte especial y sobredimensionado' : 'Special and oversized transport in Spain'} description={es ? 'Solicita una propuesta para transporte especial, sobredimensionado, prefabricados, transformadores y maquinaria. Atención directa de un consultor.' : 'Request a tailored proposal for special, oversized, precast, transformer and heavy equipment transport in Spain.'} path={es ? '/' : '/en/'} language={language} alternatePath={es ? '/en/' : '/'} schema={[organizationSchema]} />
-    <Header language={language}/>
-    <main>
-      <section className="relative bg-slate-950"><img src="/hero/ibercarga-aspa.jpg" alt="Transporte especial de un componente eólico" className="absolute inset-0 h-full w-full object-cover opacity-45"/><div className="relative mx-auto grid min-h-[680px] max-w-6xl items-center gap-10 px-4 py-16 lg:grid-cols-[1.1fr_.9fr]">
-        <div className="text-white"><p className="font-semibold uppercase tracking-[.18em] text-indigo-200">{es ? 'España y Europa' : 'Spain and Europe'}</p><h1 className="mt-4 font-display text-5xl leading-tight md:text-7xl">{es ? 'Transporte especial. Respuesta personal.' : 'Special transport. Personal response.'}</h1><p className="mt-6 max-w-2xl text-xl text-slate-100">{es ? 'Cuéntanos qué necesitas mover. Un consultor revisará personalmente la carga, la ruta y la fecha para coordinar una propuesta.' : 'Tell us what you need to move. A consultant will personally review the cargo, route and date to coordinate a proposal.'}</p><div className="mt-8 flex flex-wrap gap-3"><a href="#presupuesto" className="inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 font-semibold text-indigo-900">{es ? 'Hablar con un consultor' : 'Speak to a consultant'}<ArrowRight size={18}/></a><a href="tel:+34624473123" className="rounded-xl border border-white/60 px-5 py-3 font-semibold">+34 624 473 123</a></div></div>
-        <div id="presupuesto"><QuoteForm language={language} source={es ? 'home-es' : 'home-en'}/></div>
-      </div></section>
-      <ServiceCards language={language}/>
-      <section className="bg-white px-4 py-16"><div className="mx-auto max-w-6xl"><h2 className="font-display text-3xl md:text-4xl">{es ? 'Cómo trabajamos' : 'How we work'}</h2><div className="mt-8 grid gap-5 md:grid-cols-3">{[
-        [ClipboardList, es ? 'Recibimos los datos' : 'We receive the details', es ? 'Origen, destino, carga, dimensiones, peso y fecha.' : 'Origin, destination, cargo, dimensions, weight and date.'],
-        [Route, es ? 'Revisamos la operación' : 'We review the operation', es ? 'Consultamos medios, ruta, permisos y condicionantes.' : 'We consider equipment, route, permits and constraints.'],
-        [UserRound, es ? 'Hablas con un consultor' : 'You speak to a consultant', es ? 'Recibes atención directa para completar y valorar la propuesta.' : 'You receive direct support to complete and assess the proposal.']
-      ].map(([Icon, title, text]) => <article key={title} className="rounded-2xl border p-6"><Icon className="text-indigo-700"/><h3 className="mt-4 text-xl font-bold">{title}</h3><p className="mt-2 text-slate-600">{text}</p></article>)}</div></div></section>
-      <section className="bg-indigo-900 px-4 py-14 text-white"><div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-6 md:flex-row md:items-center"><div><p className="flex items-center gap-2 text-indigo-200"><CheckCircle2 size={18}/>{es ? 'Sin precios automáticos ni respuestas genéricas' : 'No instant prices or generic answers'}</p><h2 className="mt-2 font-display text-3xl">{es ? 'Tu operación merece una revisión real' : 'Your operation deserves a real review'}</h2></div><a href="#presupuesto" className="rounded-xl bg-white px-5 py-3 font-semibold text-indigo-900">{es ? 'Solicitar presupuesto' : 'Request a quote'}</a></div></section>
-    </main><Footer language={language}/>
-  </>;
+function Prices({ language }) {
+  const english = language === 'en';
+  const cards = english ? [
+    ['28–32 m precast beam', 'Route: 250–400 km', '€7,500–9,500', 'Extendable beam trailer', 'Permits and pilot car'],
+    ['55–65 m wind blade', 'Route: 150–300 km', '€8,500–12,000', 'Wind blade transporter', 'Special permits'],
+    ['60–90 t transformer', 'Route: 100–250 km', '€11,000–16,000', '10–12 line multi-axle', 'Route study'],
+  ] : [
+    ['Viga prefabricada 28–32 m', 'Ruta: 250–400 km', '7.500–9.500 €', 'Portavigas extensible', 'Permisos + coche piloto'],
+    ['Pala eólica 55–65 m', 'Ruta: 150–300 km', '8.500–12.000 €', 'Transportador de palas', 'Permisos especiales'],
+    ['Transformador 60–90 t', 'Ruta: 100–250 km', '11.000–16.000 €', 'Multiaxial 10–12 líneas', 'Estudio de itinerario'],
+  ];
+  return <section id="precios" className="section soft"><div className="wrap"><div className="center"><span className="kicker">Ibercarga</span><h2 className="display">{english ? 'Indicative prices' : 'Precios orientativos'}</h2><p className="lead">{english ? 'These figures are approximate and vary with dimensions, permits, loading and unloading.' : 'Estos importes son aproximados y pueden variar según dimensiones, permisos y operativas de carga/descarga.'}</p></div><div className="caseGrid">{cards.map(([title, route, price, item1, item2]) => <article key={title} className="case"><div className="caseBody"><span className="caseType">{english ? 'Reference operation' : 'Operación de referencia'}</span><h3>{title}</h3><div className="route">{route}</div><p className="permit">{item1} · {item2}</p><div className="priceLine"><small>{english ? 'Indicative price' : 'Precio orientativo'}</small><strong>{price}</strong></div></div></article>)}</div></div></section>;
+}
+
+function Process({ language }) {
+  const english = language === 'en';
+  const steps = english ? [
+    [Info, 'Describe your transport', 'Provide origin, destination, cargo and requested date.'],
+    [Truck, 'Planning and permits', 'The route, permits and pilot cars are reviewed when required.'],
+    [ArrowRight, 'Coordinated execution', 'Specialist equipment and personnel are coordinated for the movement.'],
+  ] : [
+    [Info, 'Publica tu servicio', 'Rellena origen, destino, tipo de carga y fecha. Recibirás confirmación por email.'],
+    [Truck, 'Planificación y permisos', 'Estudiamos el itinerario y gestionamos permisos y coches piloto si son necesarios.'],
+    [ArrowRight, 'Ejecución segura', 'Transportamos con flota especializada y personal experto en cargas especiales.'],
+  ];
+  return <section id="como-funciona" className="section"><div className="wrap techShell"><div className="techHead"><h2 className="display">{english ? 'How does it work?' : '¿Cómo funciona?'}</h2></div><div className="techGrid processGrid">{steps.map(([Icon, title, text]) => <article key={title} className="techCard"><div className="icon"><Icon size={22} /></div><h3>{title}</h3><p>{text}</p></article>)}</div><div className="cta"><strong>{english ? 'Tell us about your operation' : 'Cuéntanos tu operación'}</strong><a href="#presupuesto" className="btn">{english ? 'Request a quote' : 'Solicitar presupuesto'}</a></div></div></section>;
+}
+
+function Gallery({ language }) {
+  const images = [['/gallery/industrial.jpg', language === 'en' ? 'Industrial transport' : 'Transporte industrial'], ['/gallery/prefabricado.jpg', language === 'en' ? 'Precast concrete' : 'Prefabricado de hormigón'], ['/gallery/eolico.jpg', language === 'en' ? 'Wind energy' : 'Eólico'], ['/gallery/transformador.jpg', language === 'en' ? 'Transformer' : 'Transformador'], ['/gallery/maquinaria-pesada.jpg', language === 'en' ? 'Heavy equipment' : 'Maquinaria pesada'], ['/gallery/estructura-metalica.jpg', language === 'en' ? 'Steel structure' : 'Estructura metálica']];
+  return <section id="galeria" className="section soft"><div className="wrap"><div className="center"><span className="kicker">Ibercarga</span><h2 className="display">{language === 'en' ? 'Recent work' : 'Trabajos recientes'}</h2></div><div className="caseGrid galleryGrid">{images.map(([src, alt]) => <article key={src} className="case"><img src={src} alt={alt} width="640" height="448" loading="lazy" /><div className="caseBody"><span className="caseType">{alt}</span></div></article>)}</div></div></section>;
+}
+
+function Testimonials({ language }) {
+  const items = language === 'en' ? [
+    ['Hormigones Norte S.A.', 'Ibercarga coordinated twelve 30 m beams, meeting the agreed schedule and permit requirements.', 'Laura M. – Site Manager'],
+    ['Parque Eólico Cantábrico', 'Clear coordination for wind blades, route, escorts and substation manoeuvres.', 'Diego R. – Site Manager'],
+    ['ElectroRed Ibérica', 'An 85 t transformer movement with technical study and consistent communication.', 'Marta M. – Logistics Manager'],
+  ] : [
+    ['Hormigones Norte S.A.', 'Ibercarga nos movió 12 vigas de 30 m con una coordinación impecable. Cumplieron plazos y permisos sin sorpresas.', 'Laura M. – Jefa de Obra'],
+    ['Parque Eólico Cantábrico', 'Excelente en las palas eólicas. Itinerario, escoltas y maniobras en subestación con máxima seguridad.', 'Diego R. – Site Manager'],
+    ['ElectroRed Ibérica', 'Traslado de transformador 85 t con multiaxial y estudio técnico. Comunicación clara y cero incidencias.', 'Marta M. – Responsable Logística'],
+  ];
+  return <section data-section="testimonios" className="section"><div className="wrap"><div className="center"><span className="kicker">Ibercarga</span><h2 className="display">{language === 'en' ? 'Testimonials' : 'Testimonios'}</h2></div><div className="bottomGrid testimonialGrid">{items.map(([company, text, person]) => <article key={company} className="panel"><p>“{text}”</p><h3>{company}</h3><p>{person}</p></article>)}</div></div></section>;
+}
+
+function FAQ({ page }) {
+  return <section id="faq" className="section soft"><div className="wrap"><div className="center"><span className="kicker">FAQ</span><h2 className="display">{page.language === 'en' ? 'Frequently asked questions' : 'Preguntas frecuentes'}</h2></div><div className="faqGrid">{page.faq.map(({ question, answer }) => <article key={question} className="panel"><h3>{question}</h3><p>{answer}</p></article>)}</div></div></section>;
+}
+
+export default function HomePage({ page }) {
+  return <div data-layout="v12" className="v12-shell"><Seo page={page} /><Header language={page.language} /><main><Hero page={page}><CTA language={page.language} /></Hero><Prices language={page.language} /><Process language={page.language} /><Gallery language={page.language} /><Testimonials language={page.language} /><FAQ page={page} /></main><Footer language={page.language} /></div>;
 }

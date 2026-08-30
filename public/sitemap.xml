@@ -1,73 +1,111 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://ibercarga.com/</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ibercarga.com/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ibercarga.com/en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ibercarga.com/"/>
     <lastmod>2026-08-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://ibercarga.com/en/</loc>
-    <lastmod>2026-08-30</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>https://ibercarga.com/transporte-especial/</loc>
+    <loc>https://ibercarga.com/transporte-especial</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ibercarga.com/transporte-especial"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ibercarga.com/en/special-transport"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ibercarga.com/transporte-especial"/>
     <lastmod>2026-08-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ibercarga.com/transporte-sobredimensionado/</loc>
+    <loc>https://ibercarga.com/transporte-sobredimensionado</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ibercarga.com/transporte-sobredimensionado"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ibercarga.com/en/heavy-haul"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ibercarga.com/transporte-sobredimensionado"/>
     <lastmod>2026-08-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ibercarga.com/transporte-prefabricados/</loc>
+    <loc>https://ibercarga.com/transporte-transformadores</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ibercarga.com/transporte-transformadores"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ibercarga.com/transporte-transformadores"/>
     <lastmod>2026-08-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ibercarga.com/transporte-transformadores/</loc>
+    <loc>https://ibercarga.com/transporte-prefabricados</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ibercarga.com/transporte-prefabricados"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ibercarga.com/transporte-prefabricados"/>
     <lastmod>2026-08-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ibercarga.com/transporte-maquinaria-pesada/</loc>
+    <loc>https://ibercarga.com/transporte-industrial</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ibercarga.com/transporte-industrial"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ibercarga.com/transporte-industrial"/>
     <lastmod>2026-08-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ibercarga.com/en/special-transport/</loc>
+    <loc>https://ibercarga.com/transporte-eolico</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ibercarga.com/transporte-eolico"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ibercarga.com/transporte-eolico"/>
     <lastmod>2026-08-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ibercarga.com/en/oversized-cargo-transport/</loc>
+    <loc>https://ibercarga.com/gestion-permisos</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ibercarga.com/gestion-permisos"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ibercarga.com/gestion-permisos"/>
     <lastmod>2026-08-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ibercarga.com/en/precast-concrete-transport/</loc>
+    <loc>https://ibercarga.com/coches-piloto</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ibercarga.com/coches-piloto"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ibercarga.com/coches-piloto"/>
     <lastmod>2026-08-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ibercarga.com/en/transformer-transport/</loc>
+    <loc>https://ibercarga.com/estudio-ruta</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ibercarga.com/estudio-ruta"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ibercarga.com/estudio-ruta"/>
     <lastmod>2026-08-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://ibercarga.com/en/heavy-equipment-transport/</loc>
+    <loc>https://ibercarga.com/en</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ibercarga.com/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ibercarga.com/en"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ibercarga.com/"/>
+    <lastmod>2026-08-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ibercarga.com/en/special-transport</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ibercarga.com/transporte-especial"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ibercarga.com/en/special-transport"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ibercarga.com/transporte-especial"/>
+    <lastmod>2026-08-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://ibercarga.com/en/heavy-haul</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://ibercarga.com/transporte-sobredimensionado"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://ibercarga.com/en/heavy-haul"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://ibercarga.com/transporte-sobredimensionado"/>
     <lastmod>2026-08-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>

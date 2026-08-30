@@ -1,12 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#1e40af"></stop>
-      <stop offset="100%" stop-color="#0ea5e9"></stop>
-    </linearGradient>
-  </defs>
-  <rect x="2" y="2" width="60" height="60" rx="12" fill="url(#g)"></rect>
-  <path d="M18 38h16v-8H22a4 4 0 0 0-4 4v4zm16-8h8l6 6v8H34V30z" fill="white"></path>
-  <circle cx="24" cy="46" r="4" fill="white"></circle>
-  <circle cx="42" cy="46" r="4" fill="white"></circle>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Ibercarga">
+  <defs><linearGradient id="v12" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#8b83ff"/><stop offset="1" stop-color="#4338ca"/></linearGradient></defs>
+  <rect width="512" height="512" rx="112" fill="#11113c"/>
+  <rect x="82" y="164" width="92" height="240" rx="32" fill="url(#v12)"/>
+  <rect x="210" y="72" width="92" height="332" rx="32" fill="url(#v12)"/>
+  <rect x="338" y="128" width="92" height="276" rx="32" fill="url(#v12)"/>
 </svg>
