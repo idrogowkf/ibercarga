@@ -1,15 +1,9 @@
-.vercel
-.env.local
-dist/
 node_modules/
-.env*
+dist/
+.env
+.env.local
 .vercel/
+.vs/
+*.log
 .DS_Store
-
-# Build & deps
-/dist/
-/node_modules/
-.env*
-.vercel/
-# Windows ghost file
-NUL
+nul
