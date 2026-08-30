@@ -1,13 +1,46 @@
 import React, { useState } from "react";
 import { Truck, Phone, Mail, Info, ArrowRight } from "lucide-react";
 
-// -----------------------------
-// Formulario de Presupuesto
-// -----------------------------
+/* ===========================
+   Alerta simple (éxito / error)
+   =========================== */
+function Alert({ type = "info", children, onClose }) {
+    const tone =
+        type === "success"
+            ? "bg-emerald-50 border-emerald-200 text-emerald-700"
+            : type === "error"
+                ? "bg-rose-50 border-rose-200 text-rose-700"
+                : "bg-slate-50 border-slate-200 text-slate-700";
+    return (
+        <div className={`mt-4 rounded-xl border p-3 text-sm ${tone}`}>
+            <div className="flex items-start gap-3">
+                <div className="shrink-0 mt-0.5">
+                    {type === "success" ? "✅" : type === "error" ? "⚠️" : "ℹ️"}
+                </div>
+                <div className="flex-1">{children}</div>
+                {onClose && (
+                    <button
+                        type="button"
+                        onClick={onClose}
+                        className="shrink-0 rounded-lg px-2 py-1 hover:bg-black/5"
+                        aria-label="Cerrar"
+                    >
+                        ✖
+                    </button>
+                )}
+            </div>
+        </div>
+    );
+}
+
+/* ===========================
+   Formulario de Presupuesto
+   =========================== */
 function FormPresupuesto() {
     const [loading, setLoading] = useState(false);
-    const [ok, setOk] = useState(null);
+    const [ok, setOk] = useState(null); // true | false | null
     const [msg, setMsg] = useState("");
+
     const [form, setForm] = useState({
         origen: "",
         destino: "",
@@ -20,38 +53,18 @@ function FormPresupuesto() {
         email: "",
     });
 
-    const onChange = (e) => {
-        const { name, value } = e.target;
+    function onChange(e) {
+        const { name, value, type } = e.target;
         setForm((f) => ({
             ...f,
-            [name]: name === "piezas" ? Number(value) : value,
+            [name]: name === "piezas" || type === "number" ? Number(value) : value,
         }));
-    };
+    }
 
     async function onSubmit(e) {
         e.preventDefault();
         setOk(null);
         setMsg("");
-
-        const required = [
-            "origen",
-            "destino",
-            "tipo",
-            "vehiculo",
-            "piezas",
-            "fecha",
-            "nombre",
-            "telefono",
-            "email",
-        ];
-        for (const k of required) {
-            if (!form[k] && form[k] !== 0) {
-                setOk(false);
-                setMsg("Por favor completa todos los campos obligatorios.");
-                return;
-            }
-        }
-
         try {
             setLoading(true);
             const res = await fetch("/api/send-quote", {
@@ -61,12 +74,24 @@ function FormPresupuesto() {
             });
             if (!res.ok) {
                 const text = await res.text().catch(() => "");
-                throw new Error(`Error HTTP ${res.status}: ${text || "sin detalle"}`);
+                throw new Error(`Error HTTP ${res.status}${text ? `: ${text}` : ""}`);
             }
             const data = await res.json().catch(() => ({}));
             if (data?.ok) {
                 setOk(true);
-                setMsg("¡Solicitud enviada! Te hemos enviado un email de confirmación.");
+                setMsg(
+                    "¡Solicitud enviada! Te hemos enviado una copia por email y el equipo de Ibercarga la está revisando."
+                );
+                // Limpia algunos campos (mantén otros si quieres)
+                setForm((f) => ({
+                    ...f,
+                    tipo: "",
+                    piezas: 1,
+                    fecha: "",
+                    nombre: "",
+                    telefono: "",
+                    email: "",
+                }));
             } else {
                 throw new Error("La API no devolvió ok=true");
             }
@@ -183,28 +208,28 @@ function FormPresupuesto() {
             <button
                 type="submit"
                 disabled={loading}
-                className="md:col-span-2 bg-black text-white rounded-xl py-3 hover:bg-gray-800 disabled:opacity-60 flex items-center justify-center gap-2"
+                className="md:col-span-2 bg-indigo-700 text-white rounded-xl py-3 hover:bg-indigo-800 disabled:opacity-60 flex items-center justify-center gap-2"
             >
                 {loading ? "Enviando..." : <>Obtener presupuesto <ArrowRight size={18} /></>}
             </button>
 
-            {ok !== null && (
-                <div
-                    className={`md:col-span-2 mt-1 p-3 rounded-xl text-sm ${ok
-                            ? "bg-emerald-50 border border-emerald-200 text-emerald-700"
-                            : "bg-rose-50 border border-rose-200 text-rose-700"
-                        }`}
-                >
+            {ok === true && (
+                <Alert type="success" onClose={() => setOk(null)}>
                     {msg}
-                </div>
+                </Alert>
+            )}
+            {ok === false && (
+                <Alert type="error" onClose={() => setOk(null)}>
+                    {msg}
+                </Alert>
             )}
         </form>
     );
 }
 
-// -----------------------------
-// Hero (portada)
-// -----------------------------
+/* ===========================
+   Hero
+   =========================== */
 function Hero() {
     return (
         <section className="relative">
@@ -218,8 +243,8 @@ function Hero() {
                             Ibercarga
                         </h1>
                         <p className="mt-4 text-white/95 text-xl md:text-2xl max-w-3xl leading-snug">
-                            Transporte especial y sobredimensionado en toda España:
-                            eólico, prefabricado de hormigón, industrial, transformadores y más.
+                            Transporte especial y sobredimensionado en toda España: eólico, prefabricado de
+                            hormigón, industrial, transformadores y más.
                         </p>
                         <div className="mt-8 flex gap-3">
                             <a
@@ -242,9 +267,9 @@ function Hero() {
     );
 }
 
-// -----------------------------
-// Header & Footer
-// -----------------------------
+/* ===========================
+   Header & Footer
+   =========================== */
 function Header() {
     return (
         <header className="bg-indigo-800 text-white">
@@ -299,7 +324,10 @@ function Footer() {
                         <Phone size={16} /> +34 624 473 123
                     </p>
                     <p className="flex items-center gap-2 mt-1">
-                        <Mail size={16} /> <a href="mailto:transporte@ibercarga.com" className="underline">transporte@ibercarga.com</a>
+                        <Mail size={16} />{" "}
+                        <a href="mailto:transporte@ibercarga.com" className="underline">
+                            transporte@ibercarga.com
+                        </a>
                     </p>
                 </div>
             </div>
@@ -312,9 +340,9 @@ function Footer() {
     );
 }
 
-// -----------------------------
-// Cómo Funciona
-// -----------------------------
+/* ===========================
+   Cómo Funciona
+   =========================== */
 function ComoFunciona() {
     const pasos = [
         {
@@ -351,7 +379,10 @@ function ComoFunciona() {
                     ))}
                 </div>
                 <div className="mt-8">
-                    <a href="#presupuesto" className="inline-block bg-indigo-700 text-white px-6 py-3 rounded-xl hover:bg-indigo-800">
+                    <a
+                        href="#presupuesto"
+                        className="inline-block bg-indigo-700 text-white px-6 py-3 rounded-xl hover:bg-indigo-800"
+                    >
                         Solicitar presupuesto
                     </a>
                 </div>
@@ -360,9 +391,9 @@ function ComoFunciona() {
     );
 }
 
-// -----------------------------
-// Precios orientativos
-// -----------------------------
+/* ===========================
+   Precios orientativos
+   =========================== */
 function Precios() {
     return (
         <section id="precios" className="bg-white py-16 px-4">
@@ -407,9 +438,9 @@ function Precios() {
     );
 }
 
-// -----------------------------
-// Galería 6 imágenes
-// -----------------------------
+/* ===========================
+   Galería 6 imágenes
+   =========================== */
 function Galeria() {
     const imgs = [
         { src: "/gallery/industrial.jpg", alt: "Transporte industrial" },
@@ -443,9 +474,9 @@ function Galeria() {
     );
 }
 
-// -----------------------------
-// Testimonios
-// -----------------------------
+/* ===========================
+   Testimonios
+   =========================== */
 function Testimonios() {
     const items = [
         {
@@ -463,7 +494,7 @@ function Testimonios() {
         {
             empresa: "ElectroRed Ibérica",
             texto:
-                "Traslado de transformador 85 t con multiaxial y estudio técnico. Comunicación clara y zero incidencias.",
+                "Traslado de transformador 85 t con multiaxial y estudio técnico. Comunicación clara y cero incidencias.",
             persona: "Marta M. – Responsable Logística",
         },
     ];
@@ -489,9 +520,9 @@ function Testimonios() {
     );
 }
 
-// -----------------------------
-// FAQ
-// -----------------------------
+/* ===========================
+   FAQ
+   =========================== */
 function FAQ() {
     const faqs = [
         {
@@ -526,9 +557,9 @@ function FAQ() {
     );
 }
 
-// -----------------------------
-// Sección de Presupuesto (wrapper con color)
-// -----------------------------
+/* ===========================
+   Sección Presupuesto (wrapper color)
+   =========================== */
 function PresupuestoSection() {
     return (
         <section id="presupuesto" className="bg-indigo-700 py-16 px-4">
@@ -546,9 +577,9 @@ function PresupuestoSection() {
     );
 }
 
-// -----------------------------
-// App principal
-// -----------------------------
+/* ===========================
+   App principal
+   =========================== */
 export default function App() {
     return (
         <div className="min-h-screen flex flex-col">

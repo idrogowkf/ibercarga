@@ -1,6 +1,26 @@
 <!doctype html>
 <html lang="es">
 <head>
+    <!-- Google Tag Manager -->
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-17574741200"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'AW-17574741200');
+    </script>
+    <script>
+        (function (w, d, s, l, i) {
+            w[l] = w[l] || []; w[l].push({
+                'gtm.start':
+                    new Date().getTime(), event: 'gtm.js'
+            }); var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+                    'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', 'GTM-KCTGJWRP');</script>
+    <!-- End Google Tag Manager -->
     <meta charset="UTF-8" />
     <meta name="viewport"
           content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -47,22 +67,37 @@
 
     <!-- Datos estructurados -->
     <script type="application/ld+json">
-        {
-          "@context": "https://schema.org",
-          "@type": "Organization",
-          "name": "Ibercarga",
-          "url": "https://ibercarga.com/",
-          "logo": "https://ibercarga.com/favicon.svg",
-          "email": "mailto:transporte@ibercarga.com",
-          "telephone": "+34 624 473 123",
-          "sameAs": []
-        }
+                {
+                  "@context": "https://schema.org",
+                  "@type": "Organization",
+                  "name": "Ibercarga",
+                  "url": "https://ibercarga.com/",
+                  "logo": "https://ibercarga.com/favicon.svg",
+                  "email": "mailto:transporte@ibercarga.com",
+                  "telephone": "+34 624 473 123",
+                  "sameAs": []
+                }
+                <!-- Google Analytics 4 -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=GTM-KCTGJWRP"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'GTM-KCTGJWRPX', {
+            anonymize_ip: true,
+            transport_url: 'https://www.google-analytics.com/g/collect'
+        });
     </script>
-
     <!-- Generado con Vite -->
     <meta name="generator" content="Vite" />
 </head>
 <body class="antialiased">
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KCTGJWRP"
+                height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
     <div id="root"></div>
     <!-- IMPORTANTE: este path debe coincidir con tu entry real -->
     <script type="module" src="/src/index.jsx"></script>
