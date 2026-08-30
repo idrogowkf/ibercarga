@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Truck, Phone, Mail, Info, ArrowRight } from "lucide-react";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 // -----------------------------
 // Formulario de Presupuesto
@@ -563,6 +564,7 @@ export default function App() {
                 <FAQ />
             </main>
             <Footer />
+            <SpeedInsights />
         </div>
     );
 }
