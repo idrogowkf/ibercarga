@@ -13,7 +13,7 @@ export default function ServicePage({ page }) {
   const home = english ? '/en' : '/';
   return (
     <div data-layout="v12" className="v12-shell">
-      <Seo page={page} /><Header language={page.language} home={false} />
+      <Seo page={page} /><Header language={page.language} home={false} alternatePath={page.alternatePath} />
       <main>
         <nav aria-label={english ? 'Breadcrumb' : 'Migas de pan'} className="breadcrumb"><ol className="wrap"><li><Link to={home}>{english ? 'Home' : 'Inicio'}</Link></li><li aria-hidden="true">/</li><li aria-current="page">{page.title}</li></ol></nav>
         <Hero page={page}><CTA language={page.language} /></Hero>

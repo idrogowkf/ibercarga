@@ -27,6 +27,11 @@ describe('V12 shared components', () => {
     expect(container.querySelector('button.btn.btnPrimary')).toBeInTheDocument();
   });
 
+  it('links the language selector to the exact service equivalent', () => {
+    render(<MemoryRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}><Header language="es" home={false} alternatePath="/en/transformer-transport" /></MemoryRouter>);
+    expect(screen.getByRole('link', { name: 'ES ▾' })).toHaveAttribute('href', '/en/transformer-transport');
+  });
+
   it('posts the untouched V12 form fields exactly to /api/send-quote', async () => {
     const fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue({ ok: true, json: async () => ({ ok: true }) });
     render(<QuoteForm />);

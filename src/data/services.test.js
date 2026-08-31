@@ -9,6 +9,7 @@ const requestedRoutes = [
   '/transporte-maquinaria-pesada', '/en/heavy-machinery-transport',
   '/transporte-estructuras-metalicas', '/en/steel-structure-transport', '/en/transformer-transport',
   '/en/industrial-transport', '/en/precast-concrete-transport', '/en/wind-turbine-transport',
+  '/en/abnormal-load-route-survey', '/en/abnormal-load-permits',
 ];
 
 describe('SEO route catalogue', () => {
@@ -76,5 +77,15 @@ describe('SEO route catalogue', () => {
       expect(`${en.intro} ${en.sections.map(({ text }) => text).join(' ')}`).toMatch(terms);
     }
     expect(siteRoutes.some(({ path }) => /palas|nacelles|dovelas|pilotes|wind-blades/.test(path))).toBe(false);
+  });
+
+  it('completes reciprocal route-survey and permit authority pages with prudent content', () => {
+    const routeEs = findServiceByPath('/estudio-ruta'); const routeEn = findServiceByPath('/en/abnormal-load-route-survey');
+    const permitsEs = findServiceByPath('/gestion-permisos'); const permitsEn = findServiceByPath('/en/abnormal-load-permits');
+    expect(routeEs.alternatePath).toBe(routeEn.path); expect(routeEn.alternatePath).toBe(routeEs.path);
+    expect(permitsEs.alternatePath).toBe(permitsEn.path); expect(permitsEn.alternatePath).toBe(permitsEs.path);
+    expect(routeEn.sections.map(({ text }) => text).join(' ')).toMatch(/clearance|turning|bridges|overhead/i);
+    expect(permitsEn.sections.map(({ text }) => text).join(' ')).toMatch(/authority|country|time|escort/i);
+    expect(`${permitsEn.intro} ${permitsEn.sections.map(({ text }) => text).join(' ')}`).toMatch(/cannot guarantee an approval/i);
   });
 });

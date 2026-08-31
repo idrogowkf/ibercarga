@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function Header({ language = 'es', home = true }) {
+export default function Header({ language = 'es', home = true, alternatePath }) {
   const prefix = language === 'es' ? '' : '/en';
   const anchor = (id) => `${home ? '' : prefix || '/'}#${id}`;
   const labels = language === 'es'
@@ -20,7 +20,7 @@ export default function Header({ language = 'es', home = true }) {
           <a href={anchor('contacto')}>{labels.contact}</a>
         </nav>
         <div className="headActions">
-          <a className="btn lang" href={language === 'es' ? '/en' : '/'}>{language === 'es' ? 'ES ▾' : 'EN ▾'}</a>
+          <a className="btn lang" href={alternatePath || (language === 'es' ? '/en' : '/')}>{language === 'es' ? 'ES ▾' : 'EN ▾'}</a>
           <a href={anchor('presupuesto')} className="btn btnPrimary">{labels.quote}</a>
         </div>
       </div>

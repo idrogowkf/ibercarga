@@ -36,7 +36,10 @@ export const services = [
     intro: 'Un transporte especial exige coordinar dimensiones, peso, vehículo, itinerario y autorizaciones como una sola operación. Ibercarga revisa la información técnica y prepara una propuesta adaptada al origen, destino y calendario real.',
     sections: [
       { heading: 'Análisis previo de la carga y el vehículo', text: 'Se comprueban largo, ancho, alto, peso, centro de gravedad, puntos de apoyo y condiciones de carga. Con esta base se consulta la configuración adecuada: góndola, plataforma extensible, conjunto multieje o solución modular.' },
-      { heading: 'Ruta, permisos y coordinación operativa', text: 'La viabilidad no depende únicamente del camión. Radios de giro, gálibos, obras, puentes, horarios de circulación y acompañamientos condicionan el servicio.' }],
+      { heading: 'Ruta, permisos y coordinación operativa', text: 'La viabilidad no depende únicamente del camión. Radios de giro, gálibos, obras, puentes, horarios de circulación y acompañamientos condicionan el servicio.' },
+      { heading: 'Datos necesarios para iniciar el estudio', text: 'Origen y destino exactos, medidas, peso, centro de gravedad, apoyos, cantidad, fechas y condiciones de carga permiten separar una estimación preliminar de una propuesta operativa.' },
+      { heading: 'Carga, descarga y accesos', text: 'Se contrastan grúas, rampas o medios disponibles con el espacio de maniobra, el firme, las pendientes y la posición final requerida.' },
+      { heading: 'Proceso de coordinación', text: 'Ibercarga ordena la información, consulta la configuración adecuada, revisa ruta y autorizaciones y concreta el alcance antes de programar el movimiento.' }],
     faq: faq(
       ['¿Qué datos hacen falta para valorar un transporte especial?', 'Origen, destino, descripción de la pieza, dimensiones totales, peso, número de unidades, fecha y medios disponibles para carga y descarga.'],
       ['¿Se puede organizar un transporte especial internacional?', 'Sí. Se analizan rutas europeas con origen o destino en España y se coordinan los requisitos aplicables en cada territorio.'],
@@ -144,7 +147,7 @@ export const services = [
     relatedPaths: ['/estudio-ruta', '/coches-piloto', '/gestion-permisos'],
   }),
   createPage({
-    language: 'es', path: '/gestion-permisos', image: '/gallery/estructura-metalica.jpg',
+    language: 'es', path: '/gestion-permisos', alternatePath: '/en/abnormal-load-permits', image: '/gallery/estructura-metalica.jpg',
     title: 'Gestión de permisos para transporte especial', description: 'Coordinación de autorizaciones complementarias de circulación para transporte especial según vehículo, carga, ruta y calendario.',
     heading: 'Gestión de permisos vinculada a la operación de transporte', eyebrow: 'Autorizaciones y condiciones de circulación', serviceType: 'Gestión de permisos de transporte especial',
     intro: 'La autorización debe corresponder a la configuración real del conjunto, la carga y el itinerario. Una variación de medidas, matrículas o recorrido puede cambiar las condiciones.',
@@ -172,7 +175,7 @@ export const services = [
     relatedPaths: ['/gestion-permisos', '/estudio-ruta', '/transporte-sobredimensionado'],
   }),
   createPage({
-    language: 'es', path: '/estudio-ruta', image: '/gallery/estructura-metalica.jpg',
+    language: 'es', path: '/estudio-ruta', alternatePath: '/en/abnormal-load-route-survey', image: '/gallery/estructura-metalica.jpg',
     title: 'Estudio de ruta para transporte especial', description: 'Estudios de viabilidad de itinerario para cargas especiales, con revisión de gálibos, giros, pendientes, estructuras y accesos.',
     heading: 'Estudio de ruta antes de movilizar una carga especial', eyebrow: 'Viabilidad técnica del itinerario', serviceType: 'Estudio de ruta para transporte especial',
     intro: 'Una ruta válida para tráfico ordinario puede no admitir un conjunto especial. El estudio identifica restricciones físicas y operativas antes de comprometer equipo, permisos y fechas.',
@@ -288,6 +291,36 @@ export const services = [
     ],
     faq: faq(['Are blades, towers and nacelles separate services?', 'They remain within one wind transport cluster, while each component receives its own equipment and route assessment.'], ['Why is wind-farm access reviewed separately?', 'Private roads can introduce steep gradients, tight bends and platform constraints not present on the public network.'], ['Can a complete delivery campaign be reviewed?', 'Yes, when component lists, release dates, erection sequence and site constraints are available.']),
     relatedPaths: ['/en/special-transport', '/en/oversized-load-transport', '/en/abnormal-load-route-survey'],
+  }),
+  createPage({
+    language: 'en', path: '/en/abnormal-load-route-survey', alternatePath: '/estudio-ruta', image: '/gallery/estructura-metalica.jpg',
+    title: 'Abnormal load route survey and feasibility review', description: 'Route survey planning for abnormal loads, covering clearances, turning space, gradients, bridges, overhead constraints, access and corrective measures.',
+    heading: 'Abnormal load route survey before equipment and dates are fixed', eyebrow: 'Route feasibility for oversized and heavy movements', serviceType: 'Abnormal load route survey',
+    intro: 'A route used by standard traffic may not accept the loaded vehicle envelope. The review connects reliable cargo and vehicle data with physical restrictions, operating constraints and the final delivery manoeuvre.',
+    sections: [
+      { heading: 'Starting information', text: 'The assessment needs loaded length, width, height, mass, axle arrangement, turning behaviour, origin and destination access points and the intended operating period.' },
+      { heading: 'Clearances and swept path', text: 'Junctions, roundabouts, medians, narrow sections, tunnels and gates are checked against turning requirements, overhang and loaded clearances.' },
+      { heading: 'Gradients, surfaces and bridges', text: 'Gradients, breakover points, pavement condition, bridge restrictions and axle distribution can influence route choice or vehicle configuration.' },
+      { heading: 'Overhead lines and roadside assets', text: 'Power or communication lines, gantries, signs, lighting, trees and other street furniture are identified as constraints that may require coordination.' },
+      { heading: 'Access, manoeuvres and indicative output', text: 'The outcome may record critical points, assumptions, route alternatives and possible corrective actions. The exact deliverable depends on the agreed scope and is not a substitute for the required authorisation.' },
+    ],
+    faq: faq(['What information is required before a route survey?', 'Provide the loaded vehicle envelope, mass and axle arrangement, turning data, exact sites and the expected movement period.'], ['Does a route survey grant permission to travel?', 'No. It supports planning and permit applications but does not replace an authority decision.'], ['Is a physical survey always required?', 'Not always. The level of inspection depends on cargo dimensions, route uncertainty, infrastructure and site access.']),
+    relatedPaths: ['/en/oversized-load-transport', '/en/abnormal-load-permits', '/en/transformer-transport', '/en/wind-turbine-transport'],
+  }),
+  createPage({
+    language: 'en', path: '/en/abnormal-load-permits', alternatePath: '/gestion-permisos', image: '/gallery/estructura-metalica.jpg',
+    title: 'Abnormal load permit coordination in Spain and Europe', description: 'Coordination of abnormal load permit information around vehicle, cargo, route, competent authority, escorts, operating windows and variable lead times.',
+    heading: 'Abnormal load permits aligned with the actual movement', eyebrow: 'Authorisations, escorts and operating conditions', serviceType: 'Abnormal load permit coordination',
+    intro: 'An abnormal-load authorisation is tied to the real vehicle combination, loaded dimensions, mass, route and timing. Requirements differ by authority and country, so each movement must be checked against the applicable procedure.',
+    sections: [
+      { heading: 'Why authorisation may be required', text: 'Exceeding ordinary dimensional or mass limits can trigger a specific permit and operating conditions. The applicable category depends on the loaded movement, not the cargo name alone.' },
+      { heading: 'Competent authority and country rules', text: 'The responsible body, application route and supporting information vary between countries and, in some cases, between road authorities.' },
+      { heading: 'Typical supporting information', text: 'Vehicle and trailer details, axle data, cargo description, loaded dimensions, mass, route, dates and supporting drawings are commonly required, subject to the authority.' },
+      { heading: 'Pilot cars, escorts and time restrictions', text: 'A permit may impose pilot cars, police escort, route-specific measures, speed limits or restricted travel times. These conditions must be reflected in the operating plan.' },
+      { heading: 'Variable lead times and scope', text: 'Processing time depends on the route, category, consultations and authority workload. Coordination does not constitute legal advice and cannot guarantee an approval date or outcome.' },
+    ],
+    faq: faq(['How long does an abnormal load permit take?', 'Lead times vary by authority, country, route, category and required infrastructure consultations.'], ['Can one permit cover any tractor and trailer?', 'Usually the application and decision rely on identified vehicle, axle, mass, dimension and route data; substitutions must be checked.'], ['Are pilot cars included automatically?', 'No. Escort requirements depend on the permit conditions, dimensions, roads and country-specific rules.']),
+    relatedPaths: ['/en/special-transport', '/en/oversized-load-transport', '/en/abnormal-load-route-survey', '/en/heavy-machinery-transport'],
   }),
   createPage({
     language: 'en', path: '/en/oversized-load-transport', alternatePath: '/transporte-sobredimensionado', image: '/gallery/estructura-metalica.jpg',
