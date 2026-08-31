@@ -24,7 +24,7 @@ export const homePages = {
       ['Can Ibercarga review cross-border routes?', 'Yes. Ibercarga reviews Spanish domestic movements and European routes connected with Spain.'],
       ['Are permits and escorts considered?', 'The review identifies the authorisations, pilot cars and operational restrictions that may apply to the specific movement.']),
     sections: [{ heading: 'Special transport planning', text: 'Each movement is reviewed around the cargo, route, equipment and schedule.' }],
-    relatedPaths: ['/en/special-transport', '/en/heavy-haul'],
+    relatedPaths: ['/en/special-transport', '/en/oversized-load-transport'],
   }),
 };
 
@@ -44,7 +44,7 @@ export const services = [
     relatedPaths: ['/transporte-sobredimensionado', '/gestion-permisos', '/estudio-ruta'],
   }),
   createPage({
-    language: 'es', path: '/transporte-sobredimensionado', alternatePath: '/en/heavy-haul', image: '/gallery/estructura-metalica.jpg',
+    language: 'es', path: '/transporte-sobredimensionado', alternatePath: '/en/oversized-load-transport', image: '/gallery/estructura-metalica.jpg',
     title: 'Transporte sobredimensionado y cargas fuera de gálibo', description: 'Soluciones de transporte sobredimensionado para estructuras, depósitos y cargas fuera de gálibo, con estudio de medios e itinerario.',
     heading: 'Transporte sobredimensionado planificado según gálibo y recorrido', eyebrow: 'Cargas que superan las dimensiones ordinarias', serviceType: 'Transporte sobredimensionado',
     intro: 'Las cargas largas, anchas o altas requieren una lectura conjunta del gálibo y del recorrido. Ibercarga contrasta las medidas reales con los accesos y condicionantes de circulación antes de coordinar el medio de transporte.',
@@ -167,10 +167,28 @@ export const services = [
       ['Which details are required for a special transport quote?', 'Provide exact cargo dimensions and weight, origin, destination, number of pieces, loading method and requested date.'],
       ['Can you coordinate transport between European countries?', 'Yes. Ibercarga reviews cross-border movements connected with Spain and coordinates applicable requirements.'],
       ['Are permits and pilot cars included?', 'The proposal identifies the authorisations and escort services included for the specific cargo and itinerary.']),
-    relatedPaths: ['/en/heavy-haul', '/en/'],
+    relatedPaths: ['/en/oversized-load-transport', '/en/'],
   }),
   createPage({
-    language: 'en', path: '/en/heavy-haul', alternatePath: '/transporte-sobredimensionado', image: '/gallery/maquinaria-pesada.jpg',
+    language: 'en', path: '/en/oversized-load-transport', alternatePath: '/transporte-sobredimensionado', image: '/gallery/estructura-metalica.jpg',
+    title: 'Oversized load transport in Spain and Europe', description: 'Oversized load transport coordinated around cargo geometry, route clearances, permits, escorts and site access in Spain and Europe.',
+    heading: 'Oversized load transport planned around geometry and route', eyebrow: 'Long, wide and high indivisible loads', serviceType: 'Oversized load transport',
+    intro: 'Oversized transport is primarily governed by the loaded envelope: overall length, width and height must be checked against every critical point between collection and delivery. Ibercarga coordinates the enquiry around verified cargo data, a suitable trailer configuration and a feasible operating route.',
+    sections: [
+      { heading: 'Cargo data and transport envelope', text: 'The review starts with exact cargo dimensions, transport weight, support points, centre of gravity, removable projections and the loaded dimensions expected on the proposed trailer.' },
+      { heading: 'Indicative vehicle configuration', text: 'Depending on length, height and access, the solution may involve an extendable platform, low-loader or steering axle configuration. The final choice depends on the complete route and loading method.' },
+      { heading: 'Clearances, turns and access', text: 'Roundabouts, junctions, tunnels, overhead lines, narrow streets, gradients and delivery compounds are assessed together because a single restriction can change the vehicle or itinerary.' },
+      { heading: 'Permits and operational restrictions', text: 'Dimensions and route may trigger permits, pilot cars, police coordination or restricted travel windows. Requirements vary by authority and country and cannot be confirmed before the operation is defined.' },
+      { heading: 'Loading, delivery and quotation data', text: 'A workable plan also needs the loading and unloading method, available space, crane or ramp conditions, requested dates and any fixed site window. These details should accompany the quote request.' },
+    ],
+    faq: faq(
+      ['When is a load considered oversized?', 'A movement becomes oversized when the loaded vehicle exceeds ordinary dimensional or mass limits and must operate under special conditions or authorisation.'],
+      ['Is cargo weight enough to select the trailer?', 'No. Length, width, height, support layout, centre of gravity, loading method and route constraints can be equally decisive.'],
+      ['Can an oversized route be confirmed before the final drawing is available?', 'A preliminary review is possible, but route and equipment confirmation require reliable dimensions, weight and loaded configuration.']),
+    relatedPaths: ['/en/special-transport', '/en/heavy-haul'],
+  }),
+  createPage({
+    language: 'en', path: '/en/heavy-haul', image: '/gallery/maquinaria-pesada.jpg',
     title: 'Heavy haul and oversized cargo transport in Spain', description: 'Heavy haul and oversized cargo transport planning in Spain for industrial machinery, structures and high-weight indivisible loads.',
     heading: 'Heavy haul solutions built around weight, geometry and route', eyebrow: 'High-weight industrial cargo', serviceType: 'Heavy haul transport',
     intro: 'Heavy haul movements are governed by axle loads, support conditions, manoeuvring space and infrastructure capacity. Ibercarga structures the technical enquiry before equipment is confirmed.',

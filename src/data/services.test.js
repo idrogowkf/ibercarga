@@ -5,6 +5,7 @@ const requestedRoutes = [
   '/', '/transporte-especial', '/transporte-sobredimensionado', '/transporte-transformadores',
   '/transporte-prefabricados', '/transporte-industrial', '/transporte-eolico', '/gestion-permisos',
   '/coches-piloto', '/estudio-ruta', '/en/special-transport', '/en/heavy-haul',
+  '/en/oversized-load-transport',
 ];
 
 describe('SEO route catalogue', () => {
@@ -34,5 +35,15 @@ describe('SEO route catalogue', () => {
     expect(spanish.alternatePath).toBe(english.path);
     expect(english.alternatePath).toBe(spanish.path);
     expect(homePages.es.alternatePath).toBe(homePages.en.path);
+  });
+
+  it('pairs oversized transport with its exact English equivalent and keeps heavy haul distinct', () => {
+    const spanish = findServiceByPath('/transporte-sobredimensionado');
+    const english = findServiceByPath('/en/oversized-load-transport');
+    const heavyHaul = findServiceByPath('/en/heavy-haul');
+    expect(spanish.alternatePath).toBe(english.path);
+    expect(english.alternatePath).toBe(spanish.path);
+    expect(heavyHaul.alternatePath).toBeUndefined();
+    expect(heavyHaul.intro).toMatch(/axle|mass|weight/i);
   });
 });

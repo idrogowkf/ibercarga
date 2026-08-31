@@ -10,7 +10,7 @@ describe('generated sitemap', () => {
       expect(xml.split(`<loc>${canonical}</loc>`)).toHaveLength(2);
     }
     expect((xml.match(/<url>/g) || [])).toHaveLength(siteRoutes.length);
-    expect(xml).not.toContain('transporte-maquinaria-pesada');
+    expect(xml).toContain('<loc>https://ibercarga.com/en/oversized-load-transport</loc>');
   });
 
   it('uses the exported catalogue and emits complete identical hreflang clusters', () => {
