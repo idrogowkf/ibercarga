@@ -8,6 +8,7 @@ const requestedRoutes = [
   '/en/oversized-load-transport',
   '/transporte-maquinaria-pesada', '/en/heavy-machinery-transport',
   '/transporte-estructuras-metalicas', '/en/steel-structure-transport', '/en/transformer-transport',
+  '/en/industrial-transport', '/en/precast-concrete-transport', '/en/wind-turbine-transport',
 ];
 
 describe('SEO route catalogue', () => {
@@ -61,5 +62,19 @@ describe('SEO route catalogue', () => {
       expect(`${en.intro} ${en.sections.map(({ text }) => text).join(' ')}`).toMatch(term);
     }
     expect(siteRoutes.some(({ path }) => path === '/transporte-acero' || path === '/en/steel-transport')).toBe(false);
+  });
+
+  it('completes reciprocal industrial, precast and wind-energy clusters without fragment routes', () => {
+    const pairs = [
+      ['/transporte-industrial', '/en/industrial-transport', /operating window|plant/i],
+      ['/transporte-prefabricados', '/en/precast-concrete-transport', /beams|panels|piles|segments/i],
+      ['/transporte-eolico', '/en/wind-turbine-transport', /blades|tower|nacelles|hubs/i],
+    ];
+    for (const [esPath, enPath, terms] of pairs) {
+      const es = findServiceByPath(esPath); const en = findServiceByPath(enPath);
+      expect(es.alternatePath).toBe(enPath); expect(en.alternatePath).toBe(esPath);
+      expect(`${en.intro} ${en.sections.map(({ text }) => text).join(' ')}`).toMatch(terms);
+    }
+    expect(siteRoutes.some(({ path }) => /palas|nacelles|dovelas|pilotes|wind-blades/.test(path))).toBe(false);
   });
 });
