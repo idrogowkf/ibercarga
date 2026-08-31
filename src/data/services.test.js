@@ -6,6 +6,8 @@ const requestedRoutes = [
   '/transporte-prefabricados', '/transporte-industrial', '/transporte-eolico', '/gestion-permisos',
   '/coches-piloto', '/estudio-ruta', '/en/special-transport', '/en/heavy-haul',
   '/en/oversized-load-transport',
+  '/transporte-maquinaria-pesada', '/en/heavy-machinery-transport',
+  '/transporte-estructuras-metalicas', '/en/steel-structure-transport', '/en/transformer-transport',
 ];
 
 describe('SEO route catalogue', () => {
@@ -45,5 +47,19 @@ describe('SEO route catalogue', () => {
     expect(english.alternatePath).toBe(spanish.path);
     expect(heavyHaul.alternatePath).toBeUndefined();
     expect(heavyHaul.intro).toMatch(/axle|mass|weight/i);
+  });
+
+  it('publishes reciprocal high-value cargo pairs with differentiated terminology', () => {
+    const pairs = [
+      ['/transporte-transformadores', '/en/transformer-transport', /centre of gravity|transformer/i],
+      ['/transporte-maquinaria-pesada', '/en/heavy-machinery-transport', /excavator|ramp/i],
+      ['/transporte-estructuras-metalicas', '/en/steel-structure-transport', /steel beams|trusses|frames/i],
+    ];
+    for (const [esPath, enPath, term] of pairs) {
+      const es = findServiceByPath(esPath); const en = findServiceByPath(enPath);
+      expect(es.alternatePath).toBe(enPath); expect(en.alternatePath).toBe(esPath);
+      expect(`${en.intro} ${en.sections.map(({ text }) => text).join(' ')}`).toMatch(term);
+    }
+    expect(siteRoutes.some(({ path }) => path === '/transporte-acero' || path === '/en/steel-transport')).toBe(false);
   });
 });
