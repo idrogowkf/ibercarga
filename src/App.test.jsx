@@ -14,9 +14,21 @@ describe('global V12 contact actions', () => {
     expect(link).toHaveAttribute('href', 'https://wa.me/34624473123?text=Hola.%20Necesito%20informaci%C3%B3n%20sobre%20un%20transporte%20especial.');
   });
 
-  it('renders a same-page quote action targeting the shared form', () => {
-    window.history.pushState({}, '', '/en/heavy-haul');
+  it('renders the Spanish quote action on Spanish routes', () => {
+    window.history.pushState({}, '', '/');
     const { container } = render(<App />);
-    expect(container.querySelector('a.floatQuote')).toHaveAttribute('href', '#presupuesto');
+    const quote = container.querySelector('a.floatQuote');
+    expect(quote).toHaveAttribute('href', '#presupuesto');
+    expect(quote).toHaveTextContent('Solicitar presupuesto');
+    expect(screen.getByRole('complementary', { name: 'Acciones de contacto' })).toBeInTheDocument();
+  });
+
+  it('renders the English quote action on English routes', () => {
+    window.history.pushState({}, '', '/en');
+    const { container } = render(<App />);
+    const quote = container.querySelector('a.floatQuote');
+    expect(quote).toHaveAttribute('href', '#presupuesto');
+    expect(quote).toHaveTextContent('Request a quote');
+    expect(screen.getByRole('complementary', { name: 'Contact actions' })).toBeInTheDocument();
   });
 });
