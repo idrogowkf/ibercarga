@@ -27,6 +27,22 @@ describe('technical guide catalogue', () => {
     for (const source of permitGuides.flatMap(({ sources }) => sources)) {
       expect(source.url).toMatch(/^https:\/\/(sede\.dgt\.gob\.es|www\.boe\.es|transit\.gencat\.cat)\//);
       expect(source.accessedDate).toBeTruthy();
+      expect(source.organization).toBeTruthy();
+      expect(source.title).toBeTruthy();
     }
+  });
+
+  it('starts the quotation guide with complete cargo data', () => {
+    const quoteGuide = guides.find(({ path }) => path === '/guias/datos-presupuesto-transporte-especial');
+    expect(quoteGuide.sections[0].items.join(' ')).toMatch(/Largo.*ancho.*alto/i);
+    expect(quoteGuide.sections[0].items.join(' ')).toMatch(/indivisible/i);
+    expect(quoteGuide.sections[0].items.join(' ')).toMatch(/plano/i);
+    expect(quoteGuide.sections[0].items.join(' ')).toMatch(/fotos/i);
+  });
+
+  it('covers all route-survey workstreams and seasonal constraints', () => {
+    const routeGuide = guides.find(({ path }) => path === '/guias/estudio-ruta-transporte-especial');
+    const text = routeGuide.sections.flatMap(({ heading, paragraphs, items = [] }) => [heading, ...paragraphs, ...items]).join(' ');
+    for (const term of ['revisión documental', 'geometría', 'firmes', 'pendientes', 'tráfico', 'inspección física', 'autoridades', 'acceso final', 'verano', 'invierno']) expect(text.toLowerCase()).toContain(term);
   });
 });
