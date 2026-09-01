@@ -5,7 +5,9 @@ import Footer from '../components/Footer';
 import Header from '../components/Header';
 import Hero from '../components/Hero';
 import ServiceCards from '../components/ServiceCards';
+import GuideCards from '../components/GuideCards';
 import { getRelatedServices } from '../data/services';
+import { getRelatedGuides } from '../data/guides';
 import Seo from '../seo/Seo';
 
 export default function ServicePage({ page }) {
@@ -19,6 +21,7 @@ export default function ServicePage({ page }) {
         <Hero page={page}><CTA language={page.language} /></Hero>
         <section id="informacion" className="section"><div className="wrap"><div className="center"><span className="kicker">Ibercarga</span><h2 className="display">{page.serviceType}</h2></div><div className="bottomGrid informationGrid">{page.sections.map(({ heading, text }) => <article key={heading} className="panel"><h3>{heading}</h3><p>{text}</p></article>)}</div></div></section>
         <section id="faq" className="section soft"><div className="wrap"><div className="center"><span className="kicker">FAQ</span><h2 className="display">{english ? `Frequently asked questions about ${page.serviceType.toLowerCase()}` : `Preguntas frecuentes sobre ${page.serviceType.toLowerCase()}`}</h2></div><div className="faqGrid">{page.faq.map(({ question, answer }) => <details key={question} className="panel"><summary>{question}</summary><p>{answer}</p></details>)}</div></div></section>
+        <section className="section"><div className="wrap"><div className="center"><span className="kicker">{english ? 'Technical guides' : 'Centro técnico'}</span><h2 className="display">{english ? 'Related technical guides' : 'Guías técnicas relacionadas'}</h2></div><GuideCards guides={getRelatedGuides(page)} language={page.language} /></div></section>
         <ServiceCards services={getRelatedServices(page)} language={page.language} />
       </main>
       <Footer language={page.language} home={false} />

@@ -5,6 +5,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import CTA from './CTA';
 import Header from './Header';
+import Footer from './Footer';
 import Hero from './Hero';
 import QuoteForm from './QuoteForm';
 
@@ -30,6 +31,16 @@ describe('V12 shared components', () => {
   it('links the language selector to the exact service equivalent', () => {
     render(<MemoryRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}><Header language="es" home={false} alternatePath="/en/transformer-transport" /></MemoryRouter>);
     expect(screen.getByRole('link', { name: 'ES ▾' })).toHaveAttribute('href', '/en/transformer-transport');
+  });
+
+  it.each([
+    ['es', '/guias', '/estudio-ruta', '/gestion-permisos'],
+    ['en', '/en/guides', '/en/abnormal-load-route-survey', '/en/abnormal-load-permits'],
+  ])('connects the %s navigation with real technical routes', (language, guidesPath, routePath, permitsPath) => {
+    render(<MemoryRouter><Header language={language} /><Footer language={language} /></MemoryRouter>);
+    expect(screen.getAllByRole('link', { name: language === 'en' ? 'Guides' : 'Centro técnico' })[0]).toHaveAttribute('href', guidesPath);
+    expect(screen.getByRole('link', { name: language === 'en' ? 'Route surveys' : 'Estudios de ruta' })).toHaveAttribute('href', routePath);
+    expect(screen.getByRole('link', { name: language === 'en' ? 'Permits' : 'Permisos' })).toHaveAttribute('href', permitsPath);
   });
 
   it('posts the untouched V12 form fields exactly to /api/send-quote', async () => {

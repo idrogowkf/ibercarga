@@ -20,7 +20,7 @@ const officialSources = {
   transit: { name: 'Servei Català de Trànsit — Autoritzacions especials', url: 'https://transit.gencat.cat/es/gestions/autoritzacions-especials-exempcions/autoritzacions-especials-te-ve/', accessedDate: publishedDate },
 };
 
-const common = (language, data) => ({ type: 'guide', language, publishedDate, reviewedDate: publishedDate, author: authors[language], ...data });
+const common = (language, data) => ({ type: 'guide', language, category: language === 'en' ? 'Technical guide' : 'Guía técnica', publishedDate, reviewedDate: publishedDate, author: authors[language], ...data });
 
 export const guides = [
   common('es', {
@@ -208,3 +208,8 @@ export const guideRoutes = [guidesIndexPages.es, guidesIndexPages.en, authors.es
 const normalize = (path = '/') => path === '/' ? '/' : `/${path.replace(/^\/+|\/+$/g, '')}`;
 export const findGuideByPath = (path) => guideRoutes.find((page) => normalize(page.path) === normalize(path));
 export const getGuidesByLanguage = (language) => guides.filter((guide) => guide.language === language);
+export const getRelatedGuides = (service, limit = 3) => {
+  const sameLanguage = guides.filter((guide) => guide.language === service.language);
+  const directlyRelated = sameLanguage.filter((guide) => guide.relatedServicePaths.includes(service.path));
+  return [...directlyRelated, ...sameLanguage.filter((guide) => !directlyRelated.includes(guide))].slice(0, limit);
+};

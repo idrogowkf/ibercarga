@@ -29,27 +29,32 @@ function Process({ language }) {
   ] : [
     [Info, 'Publica tu servicio', 'Rellena origen, destino, tipo de carga y fecha. Recibirás confirmación por email.'],
     [Truck, 'Planificación y permisos', 'Estudiamos el itinerario y gestionamos permisos y coches piloto si son necesarios.'],
-    [ArrowRight, 'Ejecución segura', 'Transportamos con flota especializada y personal experto en cargas especiales.'],
+    [ArrowRight, 'Ejecución coordinada', 'Coordinamos medios, personal y comunicaciones de acuerdo con la planificación de la operación.'],
   ];
   return <section id="como-funciona" className="section"><div className="wrap techShell"><div className="techHead"><h2 className="display">{english ? 'How does it work?' : '¿Cómo funciona?'}</h2></div><div className="techGrid processGrid">{steps.map(([Icon, title, text]) => <article key={title} className="techCard"><div className="icon"><Icon size={22} /></div><h3>{title}</h3><p>{text}</p></article>)}</div><div className="cta"><strong>{english ? 'Tell us about your operation' : 'Cuéntanos tu operación'}</strong><a href="#presupuesto" className="btn">{english ? 'Request a quote' : 'Solicitar presupuesto'}</a></div></div></section>;
 }
 
 function Gallery({ language }) {
-  const images = [['/gallery/industrial.jpg', language === 'en' ? 'Industrial transport' : 'Transporte industrial'], ['/gallery/prefabricado.jpg', language === 'en' ? 'Precast concrete' : 'Prefabricado de hormigón'], ['/gallery/eolico.jpg', language === 'en' ? 'Wind energy' : 'Eólico'], ['/gallery/transformador.jpg', language === 'en' ? 'Transformer' : 'Transformador'], ['/gallery/maquinaria-pesada.jpg', language === 'en' ? 'Heavy equipment' : 'Maquinaria pesada'], ['/gallery/estructura-metalica.jpg', language === 'en' ? 'Steel structure' : 'Estructura metálica']];
-  return <section id="galeria" className="section soft"><div className="wrap"><div className="center"><span className="kicker">Ibercarga</span><h2 className="display">{language === 'en' ? 'Recent work' : 'Trabajos recientes'}</h2></div><div className="caseGrid galleryGrid">{images.map(([src, alt]) => <article key={src} className="case"><img src={src} alt={alt} width="640" height="448" loading="lazy" /><div className="caseBody"><span className="caseType">{alt}</span></div></article>)}</div></div></section>;
+  const english = language === 'en';
+  const images = english ? [
+    ['/gallery/industrial.jpg', 'Industrial transport', '/en/industrial-transport'], ['/gallery/prefabricado.jpg', 'Precast concrete', '/en/precast-concrete-transport'], ['/gallery/eolico.jpg', 'Wind energy', '/en/wind-turbine-transport'], ['/gallery/transformador.jpg', 'Transformer', '/en/transformer-transport'], ['/gallery/maquinaria-pesada.jpg', 'Heavy equipment', '/en/heavy-machinery-transport'], ['/gallery/estructura-metalica.jpg', 'Steel structure', '/en/steel-structure-transport'],
+  ] : [
+    ['/gallery/industrial.jpg', 'Transporte industrial', '/transporte-industrial'], ['/gallery/prefabricado.jpg', 'Prefabricado de hormigón', '/transporte-prefabricados'], ['/gallery/eolico.jpg', 'Eólico', '/transporte-eolico'], ['/gallery/transformador.jpg', 'Transformador', '/transporte-transformadores'], ['/gallery/maquinaria-pesada.jpg', 'Maquinaria pesada', '/transporte-maquinaria-pesada'], ['/gallery/estructura-metalica.jpg', 'Estructura metálica', '/transporte-estructuras-metalicas'],
+  ];
+  return <section id="galeria" className="section soft"><div className="wrap"><div className="center"><span className="kicker">Ibercarga</span><h2 className="display">{english ? 'Transport solutions by cargo type' : 'Soluciones por tipo de carga'}</h2></div><div className="caseGrid galleryGrid">{images.map(([src, alt, path]) => <article key={src} className="case"><a className="galleryLink" href={path}><img src={src} alt={alt} width="640" height="448" loading="lazy" /><div className="caseBody"><span className="caseType">{alt}</span><strong>{english ? 'View service' : 'Ver servicio'} <ArrowRight size={15} aria-hidden="true" /></strong></div></a></article>)}</div></div></section>;
 }
 
-function Testimonials({ language }) {
+function PlanningCriteria({ language }) {
   const items = language === 'en' ? [
-    ['Hormigones Norte S.A.', 'Ibercarga coordinated twelve 30 m beams, meeting the agreed schedule and permit requirements.', 'Laura M. – Site Manager'],
-    ['Parque Eólico Cantábrico', 'Clear coordination for wind blades, route, escorts and substation manoeuvres.', 'Diego R. – Site Manager'],
-    ['ElectroRed Ibérica', 'An 85 t transformer movement with technical study and consistent communication.', 'Marta M. – Logistics Manager'],
+    ['Cargo information', 'Dimensions, mass, support points and handling restrictions define the starting transport configuration.'],
+    ['Route feasibility', 'Clearances, swept paths, structures and final access are checked against the loaded combination.'],
+    ['Arrival coordination', 'Factory, haulage, crane and site teams work to one delivery and contingency sequence.'],
   ] : [
-    ['Hormigones Norte S.A.', 'Ibercarga nos movió 12 vigas de 30 m con una coordinación impecable. Cumplieron plazos y permisos sin sorpresas.', 'Laura M. – Jefa de Obra'],
-    ['Parque Eólico Cantábrico', 'Excelente en las palas eólicas. Itinerario, escoltas y maniobras en subestación con máxima seguridad.', 'Diego R. – Site Manager'],
-    ['ElectroRed Ibérica', 'Traslado de transformador 85 t con multiaxial y estudio técnico. Comunicación clara y cero incidencias.', 'Marta M. – Responsable Logística'],
+    ['Información de carga', 'Dimensiones, masa, apoyos y restricciones de manipulación definen la configuración inicial de transporte.'],
+    ['Viabilidad del recorrido', 'Gálibos, giros, estructuras y último acceso se comprueban frente al conjunto cargado.'],
+    ['Coordinación de llegada', 'Fábrica, transporte, grúa y obra trabajan con una única secuencia de entrega y contingencia.'],
   ];
-  return <section data-section="testimonios" className="section"><div className="wrap"><div className="center"><span className="kicker">Ibercarga</span><h2 className="display">{language === 'en' ? 'Testimonials' : 'Testimonios'}</h2></div><div className="bottomGrid testimonialGrid">{items.map(([company, text, person]) => <article key={company} className="panel"><p>“{text}”</p><h3>{company}</h3><p>{person}</p></article>)}</div></div></section>;
+  return <section data-section="criterios" className="section"><div className="wrap"><div className="center"><span className="kicker">Ibercarga</span><h2 className="display">{language === 'en' ? 'Technical planning criteria' : 'Criterios de planificación técnica'}</h2></div><div className="bottomGrid testimonialGrid">{items.map(([title, text]) => <article key={title} className="panel"><h3>{title}</h3><p>{text}</p></article>)}</div></div></section>;
 }
 
 function FAQ({ page }) {
@@ -57,5 +62,5 @@ function FAQ({ page }) {
 }
 
 export default function HomePage({ page }) {
-  return <div data-layout="v12" className="v12-shell"><Seo page={page} /><Header language={page.language} /><main><Hero page={page}><CTA language={page.language} /></Hero><Prices language={page.language} /><Process language={page.language} /><Gallery language={page.language} /><Testimonials language={page.language} /><FAQ page={page} /></main><Footer language={page.language} /></div>;
+  return <div data-layout="v12" className="v12-shell"><Seo page={page} /><Header language={page.language} /><main><Hero page={page}><CTA language={page.language} /></Hero><Prices language={page.language} /><Process language={page.language} /><Gallery language={page.language} /><PlanningCriteria language={page.language} /><FAQ page={page} /></main><Footer language={page.language} /></div>;
 }

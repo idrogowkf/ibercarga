@@ -14,8 +14,13 @@ describe('page composition', () => {
     expect(screen.getByRole('heading', { level: 1, name: 'Ibercarga' })).toBeInTheDocument();
     expect(container.firstChild).toHaveAttribute('data-layout', 'v12');
     expect([...container.querySelectorAll('main > section')].map((node) => node.id || node.getAttribute('data-section'))).toEqual([
-      null, 'precios', 'como-funciona', 'galeria', 'testimonios', 'faq',
+      null, 'precios', 'como-funciona', 'galeria', 'criterios', 'faq',
     ]);
+    expect(screen.getByRole('heading', { name: 'Soluciones por tipo de carga' })).toBeInTheDocument();
+    expect(screen.getAllByRole('link', { name: /Ver servicio/ })).toHaveLength(6);
+    expect(screen.queryByText('Testimonios')).not.toBeInTheDocument();
+    expect(container).not.toHaveTextContent('Hormigones Norte');
+    expect(container).not.toHaveTextContent('flota especializada');
   });
 
   it('renders a reusable landing with breadcrumb, unique content, FAQ, related links and form', () => {
@@ -26,6 +31,7 @@ describe('page composition', () => {
     expect(screen.getByRole('navigation', { name: 'Migas de pan' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Preguntas frecuentes sobre transporte eólico' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Servicios relacionados' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Guías técnicas relacionadas' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Obtener presupuesto/ })).toBeInTheDocument();
   });
 
