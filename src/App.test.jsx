@@ -32,3 +32,17 @@ describe('global V12 contact actions', () => {
     expect(screen.getByRole('complementary', { name: 'Contact actions' })).toBeInTheDocument();
   });
 });
+
+describe('technical guides architecture', () => {
+  it.each([
+    ['/guias', 'Centro técnico'],
+    ['/en/guides', 'Technical guides'],
+    ['/autor/luis-idrogo', 'Luis Idrogo'],
+    ['/en/author/luis-idrogo', 'Luis Idrogo'],
+  ])('renders %s through a dedicated reusable page', (path, heading) => {
+    window.history.pushState({}, '', path);
+    render(<App />);
+    expect(screen.getByRole('heading', { level: 1, name: heading })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /WhatsApp/ })).toBeInTheDocument();
+  });
+});

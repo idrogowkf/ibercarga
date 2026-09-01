@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { buildHreflang } from './hreflang';
 import { buildMeta } from './meta';
-import { breadcrumbSchema, faqSchema, organizationSchema, serviceSchema } from './schema';
+import { articleSchema, breadcrumbSchema, faqSchema, organizationSchema, personSchema, serviceSchema } from './schema';
 
 function upsertMeta(selector, attributes) {
   let node = document.head.querySelector(selector);
@@ -44,7 +44,13 @@ export default function Seo({ page }) {
     const homePath = page.language === 'es' ? '/' : '/en/';
     const homeName = page.language === 'es' ? 'Inicio' : 'Home';
     const crumbs = page.type === 'home' ? [{ name: homeName, path: page.path }] : [{ name: homeName, path: homePath }, { name: page.heading, path: page.path }];
-    [organizationSchema, serviceSchema(page), faqSchema(page.faq), breadcrumbSchema(crumbs)].forEach((schema) => {
+    const schemas = [organizationSchema];
+    if (page.type === 'service' || page.type === 'home') schemas.push(serviceSchema(page));
+    if (page.type === 'guide') schemas.push(articleSchema(page), personSchema(page.author));
+    if (page.type === 'author') schemas.push(personSchema(page));
+    if (page.faq?.length) schemas.push(faqSchema(page.faq));
+    schemas.push(breadcrumbSchema(crumbs));
+    schemas.forEach((schema) => {
       const script = document.createElement('script');
       script.type = 'application/ld+json'; script.dataset.ibercargaSchema = 'true'; script.textContent = JSON.stringify(schema);
       document.head.appendChild(script);

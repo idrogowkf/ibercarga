@@ -31,3 +31,11 @@ export function breadcrumbSchema(items = []) {
     })),
   };
 }
+
+export function personSchema(author) {
+  return { '@context': 'https://schema.org', '@type': 'Person', name: author.heading, description: author.bio, url: buildCanonical(author.path), jobTitle: author.role };
+}
+
+export function articleSchema(page) {
+  return { '@context': 'https://schema.org', '@type': 'Article', headline: page.heading, description: page.description, url: buildCanonical(page.path), datePublished: page.publishedDate, dateModified: page.reviewedDate, inLanguage: page.language, author: { '@type': 'Person', name: page.author.heading, url: buildCanonical(page.author.path) }, publisher: { '@type': 'Organization', name: 'Ibercarga', url: `${SITE_URL}/` } };
+}

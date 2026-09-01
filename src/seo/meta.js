@@ -10,7 +10,7 @@ export function buildMeta(page) {
     canonical: buildCanonical(page.path),
     openGraph: {
       title, description: page.description, url: buildCanonical(page.path), image: DEFAULT_IMAGE,
-      type: 'website', siteName: 'Ibercarga', locale: page.language === 'es' ? 'es_ES' : 'en_GB',
+      type: page.type === 'guide' ? 'article' : 'website', siteName: 'Ibercarga', locale: page.language === 'es' ? 'es_ES' : 'en_GB',
     },
     twitter: { card: 'summary_large_image', title, description: page.description, image: DEFAULT_IMAGE },
   };
