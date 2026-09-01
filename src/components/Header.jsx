@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Menu, X } from 'lucide-react';
 
 export default function Header({ language = 'es', home = true, alternatePath }) {
+  const [menuOpen, setMenuOpen] = useState(false);
   const prefix = language === 'es' ? '' : '/en';
   const anchor = (id) => `${home ? '' : prefix || '/'}#${id}`;
   const labels = language === 'es'
@@ -13,15 +15,18 @@ export default function Header({ language = 'es', home = true, alternatePath }) 
           <span className="mark" aria-hidden="true"><i /><i /><i /></span>
           <span><strong>Ibercarga</strong><small>{labels.tagline}</small></span>
         </a>
-        <nav aria-label={language === 'es' ? 'Navegación principal' : 'Main navigation'}>
-          <a href={anchor('precios')}>{labels.services}</a>
-          <a href={language === 'en' ? '/en/guides' : '/guias'}>{labels.technical}</a>
-          <a href={anchor('como-funciona')}>{labels.process}</a>
-          <a href={anchor('contacto')}>{labels.contact}</a>
-        </nav>
-        <div className="headActions">
-          <a className="btn lang" href={alternatePath || (language === 'es' ? '/en' : '/')}>{language === 'es' ? 'ES ▾' : 'EN ▾'}</a>
-          <a href={anchor('presupuesto')} className="btn btnPrimary">{labels.quote}</a>
+        <button className="menuToggle" type="button" aria-expanded={menuOpen} aria-controls="primary-navigation" aria-label={menuOpen ? (language === 'en' ? 'Close menu' : 'Cerrar menú') : (language === 'en' ? 'Open menu' : 'Abrir menú')} onClick={() => setMenuOpen((open) => !open)}>{menuOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}</button>
+        <div className={`headerPanel${menuOpen ? ' isOpen' : ''}`} id="primary-navigation">
+          <nav aria-label={language === 'es' ? 'Navegación principal' : 'Main navigation'}>
+            <a href={anchor('precios')} onClick={() => setMenuOpen(false)}>{labels.services}</a>
+            <a className="technicalNav" href={language === 'en' ? '/en/guides' : '/guias'} onClick={() => setMenuOpen(false)}>{labels.technical}</a>
+            <a href={anchor('como-funciona')} onClick={() => setMenuOpen(false)}>{labels.process}</a>
+            <a href={anchor('contacto')} onClick={() => setMenuOpen(false)}>{labels.contact}</a>
+          </nav>
+          <div className="headActions">
+            <a className="btn lang" href={alternatePath || (language === 'es' ? '/en' : '/')}>{language === 'es' ? 'ES ▾' : 'EN ▾'}</a>
+            <a href={anchor('presupuesto')} className="btn btnPrimary">{labels.quote}</a>
+          </div>
         </div>
       </div>
     </header>

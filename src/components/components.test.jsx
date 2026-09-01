@@ -43,6 +43,18 @@ describe('V12 shared components', () => {
     expect(screen.getByRole('link', { name: language === 'en' ? 'Permits' : 'Permisos' })).toHaveAttribute('href', permitsPath);
   });
 
+  it('exposes an accessible collapsible navigation without hiding priority actions', () => {
+    render(<MemoryRouter><Header language="es" /></MemoryRouter>);
+    const toggle = screen.getByRole('button', { name: 'Abrir menú' });
+    expect(toggle).toHaveAttribute('aria-expanded', 'false');
+    expect(screen.getByRole('link', { name: 'Centro técnico' })).toHaveAttribute('href', '/guias');
+    expect(screen.getByRole('link', { name: 'ES ▾' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Solicitar presupuesto' })).toBeInTheDocument();
+    fireEvent.click(toggle);
+    expect(toggle).toHaveAttribute('aria-expanded', 'true');
+    expect(toggle).toHaveAccessibleName('Cerrar menú');
+  });
+
   it('posts the untouched V12 form fields exactly to /api/send-quote', async () => {
     const fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue({ ok: true, json: async () => ({ ok: true }) });
     render(<QuoteForm />);
