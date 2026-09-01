@@ -4,6 +4,7 @@ import CTA from '../components/CTA';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import Hero from '../components/Hero';
+import TechnicalCentreFeature from '../components/TechnicalCentreFeature';
 import Seo from '../seo/Seo';
 
 function Prices({ language }) {
@@ -31,7 +32,7 @@ function Process({ language }) {
     [Truck, 'Planificación y permisos', 'Estudiamos el itinerario y gestionamos permisos y coches piloto si son necesarios.'],
     [ArrowRight, 'Ejecución coordinada', 'Coordinamos medios, personal y comunicaciones de acuerdo con la planificación de la operación.'],
   ];
-  return <section id="como-funciona" className="section"><div className="wrap techShell"><div className="techHead"><h2 className="display">{english ? 'How does it work?' : '¿Cómo funciona?'}</h2></div><div className="techGrid processGrid">{steps.map(([Icon, title, text]) => <article key={title} className="techCard"><div className="icon"><Icon size={22} /></div><h3>{title}</h3><p>{text}</p></article>)}</div><div className="cta"><strong>{english ? 'Tell us about your operation' : 'Cuéntanos tu operación'}</strong><a href="#presupuesto" className="btn">{english ? 'Request a quote' : 'Solicitar presupuesto'}</a></div></div></section>;
+  return <section id="como-funciona" className="section"><div className="wrap techShell"><div className="techHead"><h2 className="display">{english ? 'How does it work?' : '¿Cómo funciona?'}</h2></div><div className="techGrid processGrid">{steps.map(([Icon, title, text]) => <article key={title} className="techCard"><div className="icon"><Icon size={22} /></div><h3>{title}</h3><p>{text}</p></article>)}</div></div></section>;
 }
 
 function Gallery({ language }) {
@@ -62,5 +63,5 @@ function FAQ({ page }) {
 }
 
 export default function HomePage({ page }) {
-  return <div data-layout="v12" className="v12-shell"><Seo page={page} /><Header language={page.language} /><main><Hero page={page}><CTA language={page.language} /></Hero><Prices language={page.language} /><Process language={page.language} /><Gallery language={page.language} /><PlanningCriteria language={page.language} /><FAQ page={page} /></main><Footer language={page.language} /></div>;
+  return <div data-layout="v12" className="v12-shell"><Seo page={page} /><Header language={page.language} /><main><Hero page={page}><CTA language={page.language} /></Hero><TechnicalCentreFeature language={page.language} /><Prices language={page.language} /><Process language={page.language} /><Gallery language={page.language} /><PlanningCriteria language={page.language} /><FAQ page={page} /></main><Footer language={page.language} /></div>;
 }
