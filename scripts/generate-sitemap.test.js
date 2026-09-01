@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { siteRoutes } from '../src/data/services';
+import { guideRoutes } from '../src/data/guides';
 import { createProductionSitemap, createSitemap } from './generate-sitemap.mjs';
 
 describe('generated sitemap', () => {
@@ -15,7 +16,7 @@ describe('generated sitemap', () => {
 
   it('uses the exported catalogue and emits complete identical hreflang clusters', () => {
     const xml = createProductionSitemap('2026-08-30');
-    expect(xml).toBe(createSitemap(siteRoutes, '2026-08-30'));
+    expect(xml).toBe(createSitemap([...siteRoutes, ...guideRoutes], '2026-08-30'));
     const specialEntries = xml.match(/<url>[\s\S]*?<loc>https:\/\/ibercarga\.com\/(?:transporte-especial|en\/special-transport)<\/loc>[\s\S]*?<\/url>/g);
     expect(specialEntries).toHaveLength(2);
     for (const entry of specialEntries) {
@@ -23,5 +24,14 @@ describe('generated sitemap', () => {
       expect(entry).toContain('hreflang="en" href="https://ibercarga.com/en/special-transport"');
       expect(entry).toContain('hreflang="x-default" href="https://ibercarga.com/transporte-especial"');
     }
+  });
+
+  it('adds every technical guide route exactly once', () => {
+    const xml = createProductionSitemap('2026-09-01');
+    for (const { path } of guideRoutes) {
+      const canonical = `https://ibercarga.com/${path.replace(/^\/+|\/+$/g, '')}`;
+      expect(xml.split(`<loc>${canonical}</loc>`)).toHaveLength(2);
+    }
+    expect((xml.match(/<url>/g) || [])).toHaveLength(siteRoutes.length + guideRoutes.length);
   });
 });

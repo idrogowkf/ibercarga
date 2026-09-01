@@ -3,6 +3,7 @@ import React from 'react';
 import { render, waitFor } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { homePages } from '../data/services';
+import { guides } from '../data/guides';
 import Seo from './Seo';
 import { buildCanonical } from './canonical';
 import { buildHreflang } from './hreflang';
@@ -50,5 +51,13 @@ describe('<Seo />', () => {
     expect(document.head.querySelector('meta[name="twitter:card"]')).toHaveAttribute('content', 'summary_large_image');
     const types = [...document.head.querySelectorAll('script[data-ibercarga-schema]')].map((node) => JSON.parse(node.textContent)['@type']);
     expect(types).toEqual(['Organization', 'Service', 'FAQPage', 'BreadcrumbList']);
+  });
+
+  it('publishes guide schemas without describing the article as a Service', async () => {
+    render(<Seo page={guides[0]} />);
+    await waitFor(() => expect(document.title).toContain('Ibercarga'));
+    const types = [...document.head.querySelectorAll('script[data-ibercarga-schema]')].map((node) => JSON.parse(node.textContent)['@type']);
+    expect(types).toEqual(expect.arrayContaining(['Organization', 'Article', 'Person', 'FAQPage', 'BreadcrumbList']));
+    expect(types).not.toContain('Service');
   });
 });
