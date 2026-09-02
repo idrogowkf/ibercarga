@@ -63,5 +63,5 @@ function FAQ({ page }) {
 }
 
 export default function HomePage({ page }) {
-  return <div data-layout="v12" className="v12-shell"><Seo page={page} /><Header language={page.language} /><main><Hero page={page}><CTA language={page.language} /></Hero><TechnicalCentreFeature language={page.language} /><Prices language={page.language} /><Process language={page.language} /><Gallery language={page.language} /><PlanningCriteria language={page.language} /><FAQ page={page} /></main><Footer language={page.language} /></div>;
+  return <div data-layout="v12" className="v12-shell"><Seo page={page} /><Header language={page.language} /><main><Hero page={page}><CTA language={page.language} /></Hero><Prices language={page.language} /><Process language={page.language} /><Gallery language={page.language} /><TechnicalCentreFeature language={page.language} /><PlanningCriteria language={page.language} /><FAQ page={page} /></main><Footer language={page.language} /></div>;
 }

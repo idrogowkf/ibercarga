@@ -14,7 +14,7 @@ describe('page composition', () => {
     expect(screen.getByRole('heading', { level: 1, name: 'Ibercarga' })).toBeInTheDocument();
     expect(container.firstChild).toHaveAttribute('data-layout', 'v12');
     expect([...container.querySelectorAll('main > section')].map((node) => node.id || node.getAttribute('data-section'))).toEqual([
-      null, 'centro-tecnico', 'precios', 'como-funciona', 'galeria', 'criterios', 'faq',
+      null, 'precios', 'como-funciona', 'galeria', 'centro-tecnico', 'criterios', 'faq',
     ]);
     expect(screen.getByRole('heading', { name: 'Conocimiento técnico para decidir antes de movilizar' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Explorar el Centro técnico' })).toHaveAttribute('href', '/guias');

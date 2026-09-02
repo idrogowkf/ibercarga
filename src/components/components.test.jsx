@@ -37,8 +37,11 @@ describe('V12 shared components', () => {
     ['es', '/guias', '/estudio-ruta', '/gestion-permisos'],
     ['en', '/en/guides', '/en/abnormal-load-route-survey', '/en/abnormal-load-permits'],
   ])('connects the %s navigation with real technical routes', (language, guidesPath, routePath, permitsPath) => {
-    render(<MemoryRouter><Header language={language} /><Footer language={language} /></MemoryRouter>);
-    expect(screen.getAllByRole('link', { name: language === 'en' ? 'Guides' : 'Centro técnico' })[0]).toHaveAttribute('href', guidesPath);
+    const { container } = render(<MemoryRouter><Header language={language} /><Footer language={language} /></MemoryRouter>);
+    const technicalAction = container.querySelector('.v12-header .headActions .technicalAction');
+    expect(technicalAction).toHaveAttribute('href', guidesPath);
+    expect(technicalAction).toHaveTextContent(language === 'en' ? 'Guides' : 'Centro técnico');
+    expect(container.querySelector('.v12-header nav .technicalAction')).toBeNull();
     expect(screen.getByRole('link', { name: language === 'en' ? 'Route surveys' : 'Estudios de ruta' })).toHaveAttribute('href', routePath);
     expect(screen.getByRole('link', { name: language === 'en' ? 'Permits' : 'Permisos' })).toHaveAttribute('href', permitsPath);
   });

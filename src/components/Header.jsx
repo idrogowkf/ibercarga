@@ -19,11 +19,11 @@ export default function Header({ language = 'es', home = true, alternatePath }) 
         <div className={`headerPanel${menuOpen ? ' isOpen' : ''}`} id="primary-navigation">
           <nav aria-label={language === 'es' ? 'Navegación principal' : 'Main navigation'}>
             <a href={anchor('precios')} onClick={() => setMenuOpen(false)}>{labels.services}</a>
-            <a className="technicalNav" href={language === 'en' ? '/en/guides' : '/guias'} onClick={() => setMenuOpen(false)}>{labels.technical}</a>
             <a href={anchor('como-funciona')} onClick={() => setMenuOpen(false)}>{labels.process}</a>
             <a href={anchor('contacto')} onClick={() => setMenuOpen(false)}>{labels.contact}</a>
           </nav>
           <div className="headActions">
+            <a className="btn technicalAction" href={language === 'en' ? '/en/guides' : '/guias'} onClick={() => setMenuOpen(false)}>{labels.technical}</a>
             <a className="btn lang" href={alternatePath || (language === 'es' ? '/en' : '/')}>{language === 'es' ? 'ES ▾' : 'EN ▾'}</a>
             <a href={anchor('presupuesto')} className="btn btnPrimary">{labels.quote}</a>
           </div>

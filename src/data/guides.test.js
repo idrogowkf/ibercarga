@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { guides, guideRoutes } from './guides';
+import { getPrimaryGuides, guides, guideRoutes } from './guides';
 
 describe('technical guide catalogue', () => {
   it('publishes four reciprocal guide pairs plus indexes and authors', () => {
@@ -19,6 +19,15 @@ describe('technical guide catalogue', () => {
     for (const key of ['title', 'description', 'heading']) {
       expect(new Set(guides.map((guide) => guide[key])).size).toBe(guides.length);
     }
+  });
+
+  it.each(['es', 'en'])('presents exactly three primary guides with available images in %s', (language) => {
+    const primaryGuides = getPrimaryGuides(language);
+    expect(primaryGuides).toHaveLength(3);
+    expect(primaryGuides.every(({ path }) => !path.includes('vigas-prefabricadas') && !path.includes('precast-beam'))).toBe(true);
+    expect(primaryGuides.map(({ image }) => image)).toEqual(expect.arrayContaining([
+      '/gallery/transformador.jpg', '/gallery/industrial.jpg', '/gallery/maquinaria-pesada.jpg',
+    ]));
   });
 
   it('uses only identified public bodies for normative sources', () => {

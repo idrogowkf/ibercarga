@@ -75,7 +75,7 @@ export const guides = [
   common('es', {
     path: '/guias/datos-presupuesto-transporte-especial', alternatePath: '/en/guides/special-transport-quote-information',
     title: 'Datos para pedir presupuesto de transporte especial', description: 'Qué información técnica permite cotizar un transporte especial con alcance, medios, ruta y condicionantes definidos.',
-    heading: 'Qué datos necesita un presupuesto de transporte especial', eyebrow: 'Preparación de consultas y ofertas', image: '/gallery/vigas-hormigon.jpg',
+    heading: 'Qué datos necesita un presupuesto de transporte especial', eyebrow: 'Preparación de consultas y ofertas', image: '/gallery/industrial.jpg',
     intro: 'Una consulta precisa no necesita ser extensa, pero sí debe identificar la carga, los puntos de operación y las restricciones que cambian la solución técnica.',
     sections: [
       { heading: 'Datos mínimos de la carga', paragraphs: ['El punto de partida es una descripción inequívoca de cada pieza. Cuando un dato no está confirmado debe marcarse como provisional.'], items: ['Largo, ancho y alto máximos', 'Masa o peso unitario', 'Cantidad de piezas', 'Confirmación de que la carga es indivisible', 'Plano dimensional vigente', 'Fotos generales, apoyos y puntos de manipulación'] },
@@ -98,7 +98,7 @@ export const guides = [
   common('en', {
     path: '/en/guides/special-transport-quote-information', alternatePath: '/guias/datos-presupuesto-transporte-especial',
     title: 'Information needed for a special transport quotation', description: 'The load, site, route and programme information needed to scope an abnormal-load quotation without hidden assumptions.',
-    heading: 'Preparing a useful special transport enquiry', eyebrow: 'Enquiry and quotation preparation', image: '/gallery/vigas-hormigon.jpg',
+    heading: 'Preparing a useful special transport enquiry', eyebrow: 'Enquiry and quotation preparation', image: '/gallery/industrial.jpg',
     intro: 'A good enquiry is defined by reliable technical inputs, not by its length. It should show what is known, what remains provisional and which interfaces affect delivery.',
     sections: [
       { heading: 'The minimum information set', paragraphs: ['Provide the cargo description, maximum dimensions, unit mass, quantity, collection point, delivery point and expected programme. Label estimates rather than presenting them as final values.'], items: ['Loaded envelope for each item', 'Mass, quantity and sequence', 'Precise collection and delivery locations', 'Technical contact details'] },
@@ -120,7 +120,7 @@ export const guides = [
   common('es', {
     path: '/guias/estudio-ruta-transporte-especial', alternatePath: '/en/guides/abnormal-load-route-survey',
     title: 'Estudio de ruta para transporte especial: alcance y método', description: 'Cómo se analiza la viabilidad geométrica, estructural y operativa de un itinerario para cargas especiales.',
-    heading: 'Cómo se realiza un estudio de ruta de transporte especial', eyebrow: 'Viabilidad del itinerario', image: '/gallery/deposito-industrial.jpg',
+    heading: 'Cómo se realiza un estudio de ruta de transporte especial', eyebrow: 'Viabilidad del itinerario', image: '/gallery/maquinaria-pesada.jpg',
     intro: 'Un estudio de ruta convierte un trazado teórico en una secuencia operable, identificando restricciones, maniobras, comprobaciones y medidas necesarias.',
     sections: [
       { heading: 'Revisión documental', paragraphs: ['Se comparan cartografía, restricciones publicadas, titularidad de las vías y datos del conjunto cargado para descartar corredores incompatibles.', 'No todas las operaciones requieren la misma profundidad: el alcance se ajusta al riesgo y a los márgenes disponibles.'] },
@@ -144,7 +144,7 @@ export const guides = [
   common('en', {
     path: '/en/guides/abnormal-load-route-survey', alternatePath: '/guias/estudio-ruta-transporte-especial',
     title: 'Abnormal-load route surveys: scope and methodology', description: 'A technical method for checking geometric, structural and operational route feasibility before an abnormal-load movement.',
-    heading: 'What an abnormal-load route survey should establish', eyebrow: 'Route feasibility', image: '/gallery/deposito-industrial.jpg',
+    heading: 'What an abnormal-load route survey should establish', eyebrow: 'Route feasibility', image: '/gallery/maquinaria-pesada.jpg',
     intro: 'A route survey turns a line on a map into an executable movement plan, with constraints, evidence, actions and ownership recorded.',
     sections: [
       { heading: 'Document review', paragraphs: ['Mapping, published restrictions, road ownership and loaded-combination data are compared to screen unsuitable corridors.', 'Not every movement needs the same depth; investigation is proportionate to risk and available clearance.'] },
@@ -214,6 +214,7 @@ export const guideRoutes = [guidesIndexPages.es, guidesIndexPages.en, authors.es
 const normalize = (path = '/') => path === '/' ? '/' : `/${path.replace(/^\/+|\/+$/g, '')}`;
 export const findGuideByPath = (path) => guideRoutes.find((page) => normalize(page.path) === normalize(path));
 export const getGuidesByLanguage = (language) => guides.filter((guide) => guide.language === language);
+export const getPrimaryGuides = (language) => getGuidesByLanguage(language).filter(({ path }) => !path.includes('vigas-prefabricadas') && !path.includes('precast-beam'));
 export const getRelatedGuides = (service, limit = 3) => {
   const sameLanguage = guides.filter((guide) => guide.language === service.language);
   const directlyRelated = sameLanguage.filter((guide) => guide.relatedServicePaths.includes(service.path));
