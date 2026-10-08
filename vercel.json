@@ -2,8 +2,13 @@
   "version": 2,
   "framework": "vite",
   "cleanUrls": true,
-  "rewrites": [
-    { "source": "/((?!api/).*)", "destination": "/index" }
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "www.ibercarga.com" }],
+      "destination": "https://ibercarga.com/:path*",
+      "permanent": true
+    }
   ],
   "headers": [
     {

@@ -11,7 +11,9 @@ import ServicePage from './ServicePage';
 describe('page composition', () => {
   it('keeps every approved V12 home section in its original order', () => {
     const { container } = render(<MemoryRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}><HomePage page={homePages.es} /></MemoryRouter>);
-    expect(screen.getByRole('heading', { level: 1, name: 'Ibercarga' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: 'Transporte especial y sobredimensionado en España y Europa' })).toBeInTheDocument();
+    expect(screen.getByText('Revisión técnica de carga, ruta y medios')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Hablar con un técnico' })).toHaveAttribute('href', 'tel:+34624473123');
     expect(container.firstChild).toHaveAttribute('data-layout', 'v12');
     expect([...container.querySelectorAll('main > section')].map((node) => node.id || node.getAttribute('data-section'))).toEqual([
       null, 'precios', 'como-funciona', 'galeria', 'centro-tecnico', 'criterios', 'faq',
@@ -44,6 +46,8 @@ describe('page composition', () => {
   it('renders the existing English home with English hero content', () => {
     render(<MemoryRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}><HomePage page={homePages.en} /></MemoryRouter>);
     expect(screen.getByText(homePages.en.intro)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: 'Special and oversized transport in Spain and Europe' })).toBeInTheDocument();
+    expect(screen.getByText('Technical review of cargo, route and equipment')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Request a quote/ })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Explore the Technical Centre' })).toHaveAttribute('href', '/en/guides');
   });

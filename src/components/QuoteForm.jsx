@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 import Alert from './Alert';
+import { trackEvent } from '../analytics/events';
 
 const initialForm = { origen: '', destino: '', tipo: '', vehiculo: 'Góndola cama baja', piezas: 1, fecha: '', nombre: '', telefono: '', email: '' };
 
@@ -9,7 +10,7 @@ const copy = {
     origin: 'Origen (Ciudad o CP)', destination: 'Destino (Ciudad o CP)', cargo: 'Tipo de carga (ej. vigas 30m, 4 uds)',
     vehicle: 'Vehículo', pieces: 'Número de piezas', date: 'Fecha del servicio', name: 'Nombre o empresa', phone: 'Teléfono',
     email: 'Correo electrónico', submit: 'Obtener presupuesto', sending: 'Enviando...',
-    success: '¡Solicitud enviada! Te hemos enviado una copia por email y el equipo de Ibercarga la está revisando.',
+    success: 'Solicitud enviada. Recibirás por email el código de referencia y una copia de los datos introducidos mientras el equipo de Ibercarga revisa la operación.',
     error: 'No pudimos enviar tu solicitud. Inténtalo de nuevo en un momento.', apiError: 'La API no devolvió ok=true',
   },
   en: {
@@ -34,7 +35,9 @@ export default function QuoteForm({ language = 'es' }) {
   const [ok, setOk] = useState(null);
   const [msg, setMsg] = useState('');
   const [form, setForm] = useState(initialForm);
+  const started = useRef(false);
   function onChange(event) {
+    if (!started.current) { started.current = true; trackEvent('quote_form_start', { language }); }
     const { name, value, type } = event.target;
     setForm((current) => ({ ...current, [name]: name === 'piezas' || type === 'number' ? Number(value) : value }));
   }
@@ -46,15 +49,17 @@ export default function QuoteForm({ language = 'es' }) {
       if (!response.ok) { const text = await response.text().catch(() => ''); throw new Error(`Error HTTP ${response.status}${text ? `: ${text}` : ''}`); }
       const data = await response.json().catch(() => ({}));
       if (!data?.ok) throw new Error(labels.apiError);
+      trackEvent('quote_submit_success', { language });
       setOk(true); setMsg(labels.success);
       setForm((current) => ({ ...current, tipo: '', piezas: 1, fecha: '', nombre: '', telefono: '', email: '' }));
     } catch (error) {
+      trackEvent('quote_submit_error', { language, error_type: error?.message?.startsWith('Error HTTP') ? 'http' : 'client' });
       console.error(error); setOk(false); setMsg(labels.error);
     } finally { setLoading(false); }
   }
   return (
     <form id="presupuesto" onSubmit={onSubmit} className="quoteCard">
-      <h2>{english ? 'Request a tailored transport quote' : 'Obtén tu presupuesto en minutos'}</h2>
+      <h2>{english ? 'Request a technical transport review' : 'Solicita un estudio técnico de tu transporte'}</h2>
       <p>{english ? 'Complete the essential details. We will only request the technical information required for the operation.' : 'Completa los datos esenciales. Después solicitaremos únicamente la información técnica necesaria para la operación.'}</p>
       <div className="steps" aria-hidden="true"><span className="step on">1</span><span className="line" /><span className="step">2</span><span className="line" /><span className="step">3</span></div>
       <div className="quoteGrid">

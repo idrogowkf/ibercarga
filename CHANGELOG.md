@@ -1,5 +1,35 @@
 # Changelog
 
+## Search growth foundation — 2026-10-08
+
+### Created
+
+- `src/seo/routeCatalog.mjs` — separates renderable legacy routes from the canonical indexable catalogue.
+- `src/seo/document.mjs` — generates complete route-specific metadata, hreflang and JSON-LD in initial HTML.
+- `src/entry-server.jsx` and `scripts/prerender.mjs` — render the shared React route tree at build time and write clean-URL HTML files.
+- `scripts/audit-build.mjs` — fails release builds when routes, canonicals, descriptions, H1s, schemas or sitemap entries diverge.
+- `src/analytics/events.js` — emits privacy-safe conversion events without form or personal data.
+- Regression tests for prerendering, build auditing, server metadata and analytics privacy.
+- Legacy favicon aliases `public/favicon-16.png` and `public/favicon-32.png` for historic crawler requests.
+- Detailed design and execution plan under `docs/superpowers/`.
+
+### Modified
+
+- `src/App.jsx` and `src/index.jsx` — share the route tree between browser and server rendering, hydrate prerendered markup and stop client-side Home redirects for unknown paths.
+- `package.json` — builds client and SSR bundles, prerenders all routes and runs the release audit.
+- `vercel.json` — removes the SPA catch-all that caused duplicate initial HTML/soft 404s and adds a path-preserving canonical-host redirect.
+- `scripts/generate-sitemap.mjs` and `public/sitemap.xml` — publish only canonical indexable routes; legacy author profiles are excluded.
+- `src/data/services.mjs`, `src/components/Hero.jsx` and `src/components/QuoteForm.jsx` — replace the brand-only Home H1 and instant-price promise with an accurate technical-review proposition while preserving the form endpoint and payload.
+- `src/components/Header.jsx`, `src/components/Footer.jsx` and `src/components/FloatingActions.jsx` — add privacy-safe CTA/contact measurement; the footer phone number is now callable.
+- `src/index.css` — supports semantic hero media and the compact technical-review proof strip in the existing V12 visual language.
+- Related tests now protect ES/EN copy, direct contact, LCP image attributes, route output and Vercel behavior.
+
+### Delivery notes
+
+- `api/send-quote.js` and the `/api/send-quote` payload were not changed.
+- Build output contains 36 directly renderable routes, of which 34 are canonical/indexable; the two legacy author routes are reachable with `noindex,follow`.
+- `www.ibercarga.com` was added to the Vercel project so the platform can issue TLS and apply the single canonical redirect.
+
 ## Sprint 2 — SEO platform foundation
 
 ### Created

@@ -5,7 +5,7 @@ export const homePages = {
   es: createPage({
     type: 'home', language: 'es', path: '/', alternatePath: '/en/', title: 'Transporte especial y sobredimensionado en España',
     description: 'Transporte especial y sobredimensionado en toda España: eólico, prefabricado de hormigón, industrial, transformadores y más.',
-    heading: 'Ibercarga', eyebrow: 'Transporte especial en España y Europa', serviceType: 'Transporte especial y sobredimensionado',
+    heading: 'Transporte especial y sobredimensionado en España y Europa', eyebrow: 'Ibercarga · Planificación técnica y logística', serviceType: 'Transporte especial y sobredimensionado',
     intro: 'Transporte especial y sobredimensionado en toda España: eólico, prefabricado de hormigón, industrial, transformadores y más.',
     faq: faq(
       ['¿Qué documentos necesitáis para un transporte especial?', 'Dimensiones/peso exactos, puntos de carga/descarga y fecha prevista. Nosotros tramitamos permisos y vehículos piloto.'],
@@ -17,7 +17,7 @@ export const homePages = {
   en: createPage({
     type: 'home', language: 'en', path: '/en/', alternatePath: '/', title: 'Special and oversized transport in Spain and Europe',
     description: 'Special and oversized road transport coordination in Spain and Europe for industrial, wind-energy, precast and heavy cargo.',
-    heading: 'Ibercarga', eyebrow: 'Special transport in Spain and Europe', serviceType: 'Special and oversized transport',
+    heading: 'Special and oversized transport in Spain and Europe', eyebrow: 'Ibercarga · Technical and logistics planning', serviceType: 'Special and oversized transport',
     intro: 'Special and oversized transport support for industrial cargo, wind components, precast concrete and heavy equipment.',
     faq: faq(
       ['What information is needed for a special transport quote?', 'Provide origin, destination, cargo dimensions and weight, loading conditions and the requested date so the operation can be reviewed.'],

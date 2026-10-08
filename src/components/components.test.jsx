@@ -16,10 +16,12 @@ describe('V12 shared components', () => {
     const { container } = render(<MemoryRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}><Header /><Hero><CTA /></Hero></MemoryRouter>);
     expect(container.querySelector('header.v12-header .mark')).toHaveTextContent('');
     expect(container.querySelectorAll('header.v12-header .mark i')).toHaveLength(3);
-    expect(screen.getByRole('heading', { level: 1, name: 'Ibercarga' })).toHaveClass('display', 'heroTitle');
+    expect(screen.getByRole('heading', { level: 1, name: 'Transporte especial y sobredimensionado en España y Europa' })).toHaveClass('display', 'heroTitle');
     expect(container.querySelector('section.hero')).toBeInTheDocument();
+    expect(screen.getByRole('img', { name: 'Transporte especial y sobredimensionado en España y Europa' })).toHaveAttribute('fetchpriority', 'high');
+    expect(screen.getByRole('img', { name: 'Transporte especial y sobredimensionado en España y Europa' })).toHaveAttribute('loading', 'eager');
     expect(screen.getByText('Soluciones')).toHaveAttribute('href', '#precios');
-    expect(screen.getByRole('heading', { name: 'Obtén tu presupuesto en minutos' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Solicita un estudio técnico de tu transporte' })).toBeInTheDocument();
   });
 
   it('renders the form with the approved V12 quote card structure', () => {

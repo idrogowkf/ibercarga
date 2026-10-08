@@ -1,7 +1,6 @@
 import { writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
-import { siteRoutes } from '../src/data/services.mjs';
-import { guideRoutes } from '../src/data/guides.mjs';
+import { indexableRoutes } from '../src/seo/routeCatalog.mjs';
 
 const SITE_URL = 'https://ibercarga.com';
 
@@ -20,7 +19,7 @@ export function createSitemap(routes, lastModified = new Date().toISOString().sl
 }
 
 export function createProductionSitemap(lastModified) {
-  return createSitemap([...siteRoutes, ...guideRoutes], lastModified);
+  return createSitemap(indexableRoutes, lastModified);
 }
 
 const isDirect = process.argv[1] && fileURLToPath(import.meta.url).toLowerCase() === process.argv[1].toLowerCase();
