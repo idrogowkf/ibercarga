@@ -11,6 +11,7 @@
 - `src/analytics/events.js` — emits privacy-safe conversion events without form or personal data.
 - Regression tests for prerendering, build auditing, server metadata and analytics privacy.
 - Legacy favicon aliases `public/favicon-16.png` and `public/favicon-32.png` for historic crawler requests.
+- Optimized WebP variants for all hero/gallery sources; route heroes now preload and render the lighter asset without changing crop or layout.
 - Detailed design and execution plan under `docs/superpowers/`.
 
 ### Modified

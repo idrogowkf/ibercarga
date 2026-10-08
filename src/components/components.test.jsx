@@ -20,6 +20,7 @@ describe('V12 shared components', () => {
     expect(container.querySelector('section.hero')).toBeInTheDocument();
     expect(screen.getByRole('img', { name: 'Transporte especial y sobredimensionado en España y Europa' })).toHaveAttribute('fetchpriority', 'high');
     expect(screen.getByRole('img', { name: 'Transporte especial y sobredimensionado en España y Europa' })).toHaveAttribute('loading', 'eager');
+    expect(screen.getByRole('img', { name: 'Transporte especial y sobredimensionado en España y Europa' })).toHaveAttribute('src', '/hero/ibercarga-aspa.webp');
     expect(screen.getByText('Soluciones')).toHaveAttribute('href', '#precios');
     expect(screen.getByRole('heading', { name: 'Solicita un estudio técnico de tu transporte' })).toBeInTheDocument();
   });

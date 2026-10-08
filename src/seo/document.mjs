@@ -41,6 +41,7 @@ function seoHead(page) {
   const canonical = canonicalFor(page.path);
   const image = `https://ibercarga.com${page.image || '/hero/ibercarga-aspa.jpg'}`;
   const alternateLanguage = page.language === 'es' ? 'en' : 'es';
+  const heroImage = (page.type === 'home' ? '/hero/ibercarga-aspa.jpg' : page.image || '/hero/ibercarga-aspa.jpg').replace(/\.jpg$/, '.webp');
   const links = [`<link rel="canonical" href="${canonical}" data-ibercarga-seo-link="true">`];
   links.push(`<link rel="alternate" hreflang="${page.language}" href="${canonical}" data-ibercarga-seo-link="true">`);
   if (page.alternatePath) links.push(`<link rel="alternate" hreflang="${alternateLanguage}" href="${canonicalFor(page.alternatePath)}" data-ibercarga-seo-link="true">`);
@@ -60,7 +61,7 @@ function seoHead(page) {
     `<meta name="twitter:title" content="${escapeHtml(title)}">`,
     `<meta name="twitter:description" content="${escapeHtml(page.description)}">`,
     `<meta name="twitter:image" content="${image}">`,
-    `<link rel="preload" as="image" href="${page.type === 'home' ? '/hero/ibercarga-aspa.jpg' : page.image || '/hero/ibercarga-aspa.jpg'}" fetchpriority="high">`,
+    `<link rel="preload" as="image" href="${heroImage}" fetchpriority="high">`,
     ...links,
     ...schemasFor(page).map((schema) => `<script type="application/ld+json" data-ibercarga-schema>${jsonForHtml(schema)}</script>`),
   ].join('\n  ');

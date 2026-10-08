@@ -4,7 +4,7 @@ export default function Hero({ page, children }) {
   const isHome = !page || page.type === 'home';
   const heading = page?.heading || 'Transporte especial y sobredimensionado en España y Europa';
   const intro = page?.intro || 'Transporte especial y sobredimensionado en toda España: eólico, prefabricado de hormigón, industrial, transformadores y más.';
-  const image = isHome ? '/hero/ibercarga-aspa.jpg' : page.image;
+  const image = (isHome ? '/hero/ibercarga-aspa.jpg' : page.image).replace(/\.jpg$/, '.webp');
   return (
     <section className="hero">
       <div className="slide active"><img className="heroMedia" src={image} alt={heading} width="1920" height="1080" loading="eager" fetchpriority="high" /></div>
