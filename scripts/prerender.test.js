@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { outputFileForPath, serverEntryFile, validateRenderedRoute } from './prerender.mjs';
+import { buildNotFoundDocument, outputFileForPath, serverEntryFile, validateRenderedRoute } from './prerender.mjs';
 
 describe('route prerendering', () => {
   it('maps clean URLs to deterministic html files', () => {
@@ -14,5 +14,12 @@ describe('route prerendering', () => {
 
   it('rejects output without the route heading or canonical', () => {
     expect(() => validateRenderedRoute({ path: '/x', heading: 'Expected' }, '<html><head></head><body></body></html>')).toThrow(/canonical/i);
+  });
+
+  it('builds a noindex custom 404 document', () => {
+    const html = buildNotFoundDocument('<html lang="es"><head><title>Old</title><link rel="canonical" href="https://ibercarga.com/"></head><body><div id="root"></div></body></html>', '<main><h1>404</h1></main>');
+    expect(html).toContain('<title>Página no encontrada | Ibercarga</title>');
+    expect(html).toContain('<meta name="robots" content="noindex,follow">');
+    expect(html).not.toContain('rel="canonical"');
   });
 });
