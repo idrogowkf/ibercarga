@@ -8,7 +8,7 @@ import Seo from './Seo';
 import { buildCanonical } from './canonical';
 import { buildHreflang } from './hreflang';
 import { buildMeta } from './meta';
-import { breadcrumbSchema, faqSchema, organizationSchema, serviceSchema } from './schema';
+import { articleSchema, breadcrumbSchema, faqSchema, organizationSchema, serviceSchema } from './schema';
 
 describe('SEO primitives', () => {
   it('normalizes absolute canonical URLs', () => {
@@ -57,7 +57,9 @@ describe('<Seo />', () => {
     render(<Seo page={guides[0]} />);
     await waitFor(() => expect(document.title).toContain('Ibercarga'));
     const types = [...document.head.querySelectorAll('script[data-ibercarga-schema]')].map((node) => JSON.parse(node.textContent)['@type']);
-    expect(types).toEqual(expect.arrayContaining(['Organization', 'Article', 'Person', 'FAQPage', 'BreadcrumbList']));
+    expect(types).toEqual(expect.arrayContaining(['Organization', 'Article', 'FAQPage', 'BreadcrumbList']));
+    expect(types).not.toContain('Person');
     expect(types).not.toContain('Service');
+    expect(articleSchema(guides[0]).author).toEqual({ '@type': 'Organization', name: 'Ibercarga', url: 'https://ibercarga.com/' });
   });
 });

@@ -1,5 +1,32 @@
 # Changelog
 
+## Organic growth audit — 2026-10-09
+
+### Evidence reviewed
+
+- Search Console performance, coverage, sitemap state and a live Googlebot inspection of `/transporte-especial`.
+- Direct production crawl of all 34 canonical routes, the 404 surface, robots, sitemap and host variants.
+- Mobile Lighthouse baselines for the Home and primary commercial landing.
+- Search-result and page-structure comparison with Grupo SGT, TRACAP Aragón, Transvolando and Transportes Carballo.
+
+### Corrected
+
+- `src/seo/schema.js`, `src/seo/Seo.jsx` and `src/seo/document.mjs` now agree on Organization authorship for technical guides and no longer publish a hidden Person entity that is absent from visible guide content.
+- `src/components/FloatingActions.jsx` keeps local form scrolling on Home/service pages and routes guide-page quote actions to the real ES or EN Home form.
+- Home gallery, guide-card and technical-centre images now use their existing WebP derivatives without changing composition or layout.
+- Approved Inter and Barlow Condensed faces are self-hosted under `public/fonts/`, eliminating the blocking Google Fonts stylesheet without changing typography.
+- The duplicate direct Google Ads bootstrap was removed from `index.html`; the existing GTM container remains the single measurement bootstrap and continues to load the configured Ads destination.
+- Price-label contrast and footer tap-target spacing now meet the Lighthouse accessibility checks without altering the V12 component structure.
+- `vercel.json` adds explicit sitemap/robots content types and conservative browser security headers.
+- `scripts/audit-build.mjs` now rejects mismatched document language, title, description, self-hreflang, Open Graph URL, hidden guide Person schema and duplicate titles/descriptions.
+
+### Verification
+
+- 72 automated tests pass.
+- Build prerenders 36 routes and audits 34 unique canonical/indexable documents.
+- Local mobile Lighthouse: Home 79/100 Performance and 100/100 Accessibility, Best Practices and SEO; `/transporte-especial` 82/100 Performance and 100/100 in the other three categories.
+- `api/send-quote.js`, the quote payload and `POST /api/send-quote` were not modified.
+
 ## Search growth foundation — 2026-10-08
 
 ### Created

@@ -7,7 +7,9 @@ import CTA from './CTA';
 import Header from './Header';
 import Footer from './Footer';
 import Hero from './Hero';
+import GuideCards from './GuideCards';
 import QuoteForm from './QuoteForm';
+import TechnicalCentreFeature from './TechnicalCentreFeature';
 
 afterEach(() => { cleanup(); vi.restoreAllMocks(); });
 
@@ -91,5 +93,12 @@ describe('V12 shared components', () => {
     expect(screen.getByLabelText('Telephone')).toHaveAttribute('name', 'telefono');
     expect(screen.getByLabelText('Email address')).toHaveAttribute('name', 'email');
     expect(screen.getByRole('button', { name: /Request a quote/ })).toBeInTheDocument();
+  });
+
+  it('delivers existing WebP derivatives for below-the-fold V12 media', () => {
+    const guide = { path: '/guia', heading: 'Guía', category: 'Guía técnica', description: 'Descripción', image: '/gallery/industrial.jpg' };
+    const { container } = render(<MemoryRouter><GuideCards guides={[guide]} /><TechnicalCentreFeature /></MemoryRouter>);
+    expect(container.querySelector('.guideVisualMedia img')).toHaveAttribute('src', '/gallery/industrial.webp');
+    expect(container.querySelector('.technicalFeatureVisual img')).toHaveAttribute('src', '/gallery/estructura-metalica.webp');
   });
 });

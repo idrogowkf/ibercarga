@@ -32,4 +32,13 @@ describe('server SEO document', () => {
     const schemas = [...html.matchAll(/<script type="application\/ld\+json" data-ibercarga-schema>(.*?)<\/script>/g)].map((match) => JSON.parse(match[1]));
     expect(schemas.map((schema) => schema['@type'])).toEqual(expect.arrayContaining(['Organization', 'Service', 'FAQPage', 'BreadcrumbList']));
   });
+
+  it('uses only visible organization authorship for technical guides', () => {
+    const page = findPageByPath('/guias/estudio-ruta-transporte-especial');
+    const html = buildSeoDocument(page, '<main><h1>Guía</h1></main>', '<!doctype html><html><head></head><body><div id="root"></div></body></html>');
+    const schemas = [...html.matchAll(/<script type="application\/ld\+json" data-ibercarga-schema>(.*?)<\/script>/g)].map((match) => JSON.parse(match[1]));
+    const article = schemas.find((schema) => schema['@type'] === 'Article');
+    expect(article.author).toEqual({ '@type': 'Organization', name: 'Ibercarga', url: 'https://ibercarga.com/' });
+    expect(schemas.some((schema) => schema['@type'] === 'Person')).toBe(false);
+  });
 });

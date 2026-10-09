@@ -9,7 +9,7 @@ export default function TechnicalCentreFeature({ language = 'es' }) {
   return (
     <section id="centro-tecnico" className="technicalFeature section">
       <div className="wrap technicalFeatureShell">
-        <div className="technicalFeatureVisual"><img src="/gallery/estructura-metalica.jpg" alt={english ? 'Technical planning for special transport' : 'Planificación técnica de transporte especial'} width="760" height="620" loading="lazy" /></div>
+        <div className="technicalFeatureVisual"><img src="/gallery/estructura-metalica.webp" alt={english ? 'Technical planning for special transport' : 'Planificación técnica de transporte especial'} width="760" height="620" loading="lazy" /></div>
         <div className="technicalFeatureContent">
           <span className="kicker">{english ? 'Technical Centre' : 'Centro técnico'}</span>
           <h2 className="display">{english ? 'Practical knowledge before anything moves' : 'Conocimiento técnico para decidir antes de movilizar'}</h2>

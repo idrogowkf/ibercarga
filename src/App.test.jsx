@@ -31,6 +31,17 @@ describe('global V12 contact actions', () => {
     expect(quote).toHaveTextContent('Request a quote');
     expect(screen.getByRole('complementary', { name: 'Contact actions' })).toBeInTheDocument();
   });
+
+  it.each([
+    ['/guias', '/#presupuesto'],
+    ['/guias/estudio-ruta-transporte-especial', '/#presupuesto'],
+    ['/en/guides', '/en#presupuesto'],
+    ['/en/guides/abnormal-load-route-survey', '/en#presupuesto'],
+  ])('sends the quote action on %s to a real form target', (path, href) => {
+    window.history.pushState({}, '', path);
+    const { container } = render(<App />);
+    expect(container.querySelector('a.floatQuote')).toHaveAttribute('href', href);
+  });
 });
 
 describe('technical guides architecture', () => {

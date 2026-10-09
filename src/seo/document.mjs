@@ -23,7 +23,9 @@ function schemasFor(page) {
   if (page.type === 'guide') result.push({
     '@context': 'https://schema.org', '@type': 'Article', headline: page.heading, description: page.description,
     url: canonicalFor(page.path), datePublished: page.publishedDate, dateModified: page.reviewedDate,
-    inLanguage: page.language, publisher: { '@type': 'Organization', name: 'Ibercarga', url: 'https://ibercarga.com/' },
+    inLanguage: page.language,
+    author: { '@type': 'Organization', name: 'Ibercarga', url: 'https://ibercarga.com/' },
+    publisher: { '@type': 'Organization', name: 'Ibercarga', url: 'https://ibercarga.com/' },
   });
   if (page.faq?.length) result.push({
     '@context': 'https://schema.org', '@type': 'FAQPage',

@@ -46,7 +46,7 @@ export default function Seo({ page }) {
     const crumbs = page.type === 'home' ? [{ name: homeName, path: page.path }] : [{ name: homeName, path: homePath }, { name: page.heading, path: page.path }];
     const schemas = [organizationSchema];
     if (page.type === 'service' || page.type === 'home') schemas.push(serviceSchema(page));
-    if (page.type === 'guide') schemas.push(articleSchema(page), personSchema(page.author));
+    if (page.type === 'guide') schemas.push(articleSchema(page));
     if (page.type === 'author') schemas.push(personSchema(page));
     if (page.faq?.length) schemas.push(faqSchema(page.faq));
     schemas.push(breadcrumbSchema(crumbs));
