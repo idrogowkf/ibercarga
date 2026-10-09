@@ -11,14 +11,14 @@ function Prices({ language }) {
   const english = language === 'en';
   const cards = english ? [
     ['28–32 m precast beam', 'Route: 250–400 km', '€7,500–9,500', 'Extendable beam trailer', 'Permits and pilot car'],
-    ['55–65 m wind blade', 'Route: 150–300 km', '€8,500–12,000', 'Wind blade transporter', 'Special permits'],
-    ['60–90 t transformer', 'Route: 100–250 km', '€11,000–16,000', '10–12 line multi-axle', 'Route study'],
+    ['55–65 m wind blade', 'Route: 150–300 km', '€12,000–18,000', 'Wind blade transporter', 'Special permits'],
+    ['60–90 t transformer', 'Route: 100–250 km', '€12,000–20,000', '10–12 line multi-axle', 'Route study'],
   ] : [
     ['Viga prefabricada 28–32 m', 'Ruta: 250–400 km', '7.500–9.500 €', 'Portavigas extensible', 'Permisos + coche piloto'],
-    ['Pala eólica 55–65 m', 'Ruta: 150–300 km', '8.500–12.000 €', 'Transportador de palas', 'Permisos especiales'],
-    ['Transformador 60–90 t', 'Ruta: 100–250 km', '11.000–16.000 €', 'Multiaxial 10–12 líneas', 'Estudio de itinerario'],
+    ['Pala eólica 55–65 m', 'Ruta: 150–300 km', '12.000–18.000 €', 'Transportador de palas', 'Permisos especiales'],
+    ['Transformador 60–90 t', 'Ruta: 100–250 km', '12.000–20.000 €', 'Multiaxial 10–12 líneas', 'Estudio de itinerario'],
   ];
-  return <section id="precios" className="section soft"><div className="wrap"><div className="center"><span className="kicker">Ibercarga</span><h2 className="display">{english ? 'Indicative prices' : 'Precios orientativos'}</h2><p className="lead">{english ? 'These figures are approximate and vary with dimensions, permits, loading and unloading.' : 'Estos importes son aproximados y pueden variar según dimensiones, permisos y operativas de carga/descarga.'}</p></div><div className="caseGrid">{cards.map(([title, route, price, item1, item2]) => <article key={title} className="case"><div className="caseBody"><span className="caseType">{english ? 'Reference operation' : 'Operación de referencia'}</span><h3>{title}</h3><div className="route">{route}</div><p className="permit">{item1} · {item2}</p><div className="priceLine"><small>{english ? 'Indicative price' : 'Precio orientativo'}</small><strong>{price}</strong></div></div></article>)}</div></div></section>;
+  return <section id="precios" className="section soft"><div className="wrap"><div className="center"><span className="kicker">Ibercarga</span><h2 className="display">{english ? 'Indicative prices' : 'Precios orientativos'}</h2><p className="lead">{english ? 'Indicative scenarios excluding civil works, major removals and unloading equipment; subject to route verification and permits.' : 'Escenarios orientativos sin obra civil, grandes desmontajes ni medios de descarga; sujetos a comprobación de ruta y autorización.'}</p></div><div className="caseGrid">{cards.map(([title, route, price, item1, item2]) => <article key={title} className="case"><div className="caseBody"><span className="caseType">{english ? 'Reference operation' : 'Operación de referencia'}</span><h3>{title}</h3><div className="route">{route}</div><p className="permit">{item1} · {item2}</p><div className="priceLine"><small>{english ? 'Indicative price' : 'Precio orientativo'}</small><strong>{price}</strong></div></div></article>)}</div></div></section>;
 }
 
 function Process({ language }) {

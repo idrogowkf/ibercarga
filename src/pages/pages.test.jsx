@@ -51,4 +51,23 @@ describe('page composition', () => {
     expect(screen.getByRole('button', { name: /Request a quote/ })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Explore the Technical Centre' })).toHaveAttribute('href', '/en/guides');
   });
+
+  it('shows the researched indicative transport ranges in both languages', () => {
+    const { unmount } = render(<MemoryRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}><HomePage page={homePages.es} /></MemoryRouter>);
+    expect(screen.getByText('12.000–18.000 €')).toBeInTheDocument();
+    expect(screen.getByText('12.000–20.000 €')).toBeInTheDocument();
+    expect(screen.getByText('7.500–9.500 €')).toBeInTheDocument();
+    expect(screen.getByText(/Escenarios orientativos sin obra civil/)).toBeInTheDocument();
+    expect(screen.queryByText('8.500–12.000 €')).not.toBeInTheDocument();
+    expect(screen.queryByText('11.000–16.000 €')).not.toBeInTheDocument();
+    unmount();
+
+    render(<MemoryRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}><HomePage page={homePages.en} /></MemoryRouter>);
+    expect(screen.getByText('€12,000–18,000')).toBeInTheDocument();
+    expect(screen.getByText('€12,000–20,000')).toBeInTheDocument();
+    expect(screen.getByText('€7,500–9,500')).toBeInTheDocument();
+    expect(screen.getByText(/Indicative scenarios excluding civil works/)).toBeInTheDocument();
+    expect(screen.queryByText('€8,500–12,000')).not.toBeInTheDocument();
+    expect(screen.queryByText('€11,000–16,000')).not.toBeInTheDocument();
+  });
 });
